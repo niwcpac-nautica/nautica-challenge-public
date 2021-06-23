@@ -5,7 +5,12 @@
 Welcome!
 The **NAUTICA Challenge** will allow participants, NAUTICA students, DoD personnel, collaboration partners, and others to train/implement AI agents to compete against NAUTICA agents and each other within a wargame-like environment!
 
-If you would like to sign up for the challenge make sure you sign up [https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge+Sign-Up+Sheet]!
+If you would like to sign up for the challenge make sure you sign up [here](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge+Sign-Up+Sheet)!
+
+To register for a Naval LIFT account using your CAC or yubikey, please make a request:
+1. Visit https://portal.lift.mhpcc.hpc.mil/liftaccounts/logins/signup
+2. Use Richmond Yen, NAUTICA PI as registration POC with my email: richmond.yen@niwc.navy.mil 
+
 
 ## Features
 
