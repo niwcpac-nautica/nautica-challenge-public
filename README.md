@@ -23,9 +23,10 @@ to get started with the latest release of The NAUTICA Challenge**
 
 ## Additional Resources
 
-We have some resources here to help you get started.
+We have some resources here to help you get started:
+[NAUTICA Challenge Release Notes](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge+Release+Notes)
 
-[NAUTICA Challenge Setup](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/Nautica+Challenge+Setup),
+[NAUTICA Challenge Setup](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge+Setup),
 that will allow you to set up the environment.
 
 [NAUTICA Lectures](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/Curriculum+Overview),
@@ -34,10 +35,15 @@ that teach you how to use ML-Agents and machine learning theory.
 [NAUTICA Challenge Agent Training Recommendations](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge+Agent+Training+Recommendations),
 if you get stuck, these tips will help!
 
+[NAUTICA Challenge Environment Information](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/Challenge+Environment+Information),
+to help get you familiarized with our environment!
+
+[NAUTICA Challenge General Information](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge),
+your one stop shop for all the Challenge information you can handle!
+
+
 [ML-Agents repository](https://github.com/Unity-Technologies/ml-agents)
 [Open AI Gym URLS](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/Open+AI+Gym+URLs)
-
-
 
 
 ### More from Unity
@@ -52,3 +58,5 @@ or any other problems, to please
 [submit a GitHub issue](https://github.com/zako42/nautica-challenge/issues). Make sure to include as much detail as possible!
 
 Thank you so much for supporting the NAUTICA Challenge!
+
+The NAUTICA Team!
