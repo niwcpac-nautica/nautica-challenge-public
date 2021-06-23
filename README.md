@@ -1,12 +1,12 @@
 # Nautica Challenge
 
-[![docs badge](https://img.shields.io/badge/docs-reference-blue.svg)](https://github.com/zako42/nautica-challenge)
+[![docs badge](https://img.shields.io/badge/docs-reference-blue.svg)](https://github.com/niwcpac-nautica/nautica-challenge-public)
 
 Welcome!
 The **NAUTICA Challenge** will allow participants, NAUTICA students, DoD personnel, collaboration partners, and others to train/implement AI agents to compete against NAUTICA agents and each other within a wargame-like environment!
 
-If you would like to sign up for the challenge make sure you sign up [here]!
-For more intro 
+If you would like to sign up for the challenge make sure you sign up [https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge+Sign-Up+Sheet]!
+
 ## Features
 
 - Updated [Release Notes](ReleaseNotes.md)
