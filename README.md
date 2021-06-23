@@ -17,7 +17,7 @@ If you would like to sign up for the challenge make sure you sign up [https://wi
 ## Releases & Documentation
 
 **Our latest, stable release is `ALPHA`. Click
-[here](https://github.com/zako42/nautica-challenge/tree/main)
+[here](https://github.com/niwcpac-nautica/nautica-challenge-public)
 to get started with the latest release of The NAUTICA Challenge**
 
 
@@ -55,7 +55,7 @@ your one stop shop for all the Challenge information you can handle!
 The NAUTICA Project would also like to invite anyone that is having problems with
 the installation, setup of the project, how to best train your agents, 
 or any other problems, to please 
-[submit a GitHub issue](https://github.com/zako42/nautica-challenge/issues). Make sure to include as much detail as possible!
+[submit a GitHub issue](https://github.com/niwcpac-nautica/nautica-challenge-public/issues). Make sure to include as much detail as possible!
 
 Thank you so much for supporting the NAUTICA Challenge!
 
