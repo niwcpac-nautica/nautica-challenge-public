@@ -10,7 +10,16 @@
   - For more information regarding our alpha challenge environment, please see: [Challenge Environment Information](ChallengeEnvironmentInformation.md)
 
 ## Beta
- ETA: Week of July 19th, 2021.
+- 29 Jul 2021
+  -New Features:
+    - Switching levels for agent training now easier. 
+    - The the level prefabs just need to be placed into the training scene.
+    - All levels are ready for training.
+    - Training in Google Colab is now possible.
+      - Google Colab Python Notebook allows users to train with Google's resources over the cloud instead of their own computer.
+      - Link to Google Colab: https://colab.research.google.com/drive/1uWfjZ1fr1hYwsNbY-nCCnjcpwNG0aKOH?usp=sharing
+      - Make a copy of the Python notebook in your own google account.
+      - Include your game build in the specified path on your google account.
 
 ## Final
  ETA: Week of September 20th, 2021.
