@@ -17,7 +17,7 @@
     - All levels are ready for training.
     - Training in Google Colab is now possible.
       - Google Colab Python Notebook allows users to train with Google's resources over the cloud instead of their own computer.
-      - Link to Google Colab: https://colab.research.google.com/drive/1uWfjZ1fr1hYwsNbY-nCCnjcpwNG0aKOH?usp=sharing
+      - Link to [Google Colab:] (https://colab.research.google.com/drive/1uWfjZ1fr1hYwsNbY-nCCnjcpwNG0aKOH?usp=sharing)
       - Make a copy of the Python notebook in your own google account.
       - Include your game build in the specified path on your google account.
 
