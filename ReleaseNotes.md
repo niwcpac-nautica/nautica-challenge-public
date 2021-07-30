@@ -2,12 +2,11 @@
 
 ## Beta
 - 29 Jul 2021
-  -New Features:
-    - Switching levels for agent training now easier. 
-    - The the level prefabs just need to be placed into the training scene.
-    - All levels are ready for training.
-    - Training in Google Colab is now possible.
-      - Google Colab Python Notebook allows users to train with Google's resources over the cloud instead of their own computer.
+  -New Features
+    - All levels are ready for agent training.
+      - Switching levels for agent training now easier... just update "next level" (don't change "current level").  
+      - The level prefabs just need to be placed into the training scene.
+    - Agent training with Google Colab Python Notebook available!  Allows users to train with Google's resources over the cloud instead of on their own computer.
       - Link to [Google Colab](https://colab.research.google.com/drive/1uWfjZ1fr1hYwsNbY-nCCnjcpwNG0aKOH?usp=sharing)
       - Make a copy of the Python notebook in your own google account.
       - Include your game build in the specified path on your google account.
