@@ -16,7 +16,9 @@ namespace Unity.FPS.Game
 
         void Start()
         {
-            m_ActorsManager = GameObject.FindObjectOfType<ActorsManager>();
+			// TODO: separate actor manager needed per arena
+            // m_ActorsManager = GameObject.FindObjectOfType<ActorsManager>();
+            m_ActorsManager = GetComponentInParent<ActorsManager>();
             DebugUtility.HandleErrorIfNullFindObject<ActorsManager, Actor>(m_ActorsManager, this);
 
             // Register as an actor

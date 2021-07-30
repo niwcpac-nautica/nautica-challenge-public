@@ -6,12 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
-    public float timeValue = 1;
+    /// <summary>
+    /// You need to change timeValue here! It cant be done in the scene because it has to be static accross all scenes.
+    /// </summary>
+    static public float timeValue = 900;
+    // This is where you put in the text object in the scene so it shows up in game.
     public Text timerText;
     [Header("Lose")] [Tooltip("This string has to be the name of the scene you want to load when losing")]
     public string LoseSceneName = "Lose";
-    //public GameObject tick;
-
+    
 
     // Update is called once per frame
     void Start()
@@ -20,7 +23,7 @@ public class Timer : MonoBehaviour
     }
     void awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(transform.gameObject);
     }
     void Update()
     {
@@ -29,15 +32,14 @@ public class Timer : MonoBehaviour
         {
             timeValue -= Time.deltaTime;
         } 
-        else if(timeValue == 0)
+        if(timeValue <= 0)
         {
-            
             SceneManager.LoadScene(LoseSceneName);
         }
 
         DisplayTime(timeValue);
     }
-    
+
     void DisplayTime(float timeToDisplay)
     {
         if(timeToDisplay < 0)

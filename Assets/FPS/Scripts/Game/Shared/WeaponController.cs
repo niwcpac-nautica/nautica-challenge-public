@@ -192,6 +192,9 @@ namespace Unity.FPS.Game
                 {
                     GameObject shell = Instantiate(ShellCasing, transform);
                     shell.SetActive(false);
+					// NOTE: not using this right now, but if we do later,
+					// will need to set shell parents to be the level so the level manager can clean them up
+					shell.transform.parent = Owner.transform;
                     m_PhysicalAmmoPool.Enqueue(shell.GetComponent<Rigidbody>());
                 }
             }
@@ -462,6 +465,7 @@ namespace Unity.FPS.Game
                 Vector3 shotDirection = GetShotDirectionWithinSpread(WeaponMuzzle);
                 ProjectileBase newProjectile = Instantiate(ProjectilePrefab, WeaponMuzzle.position,
                     Quaternion.LookRotation(shotDirection));
+				newProjectile.transform.parent = Owner.transform;
                 newProjectile.Shoot(this);
             }
 

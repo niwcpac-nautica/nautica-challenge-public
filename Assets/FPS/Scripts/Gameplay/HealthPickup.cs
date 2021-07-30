@@ -15,7 +15,9 @@ namespace Unity.FPS.Gameplay
             {
                 playerHealth.Heal(HealAmount);
                 PlayPickupFeedback();
-                Destroy(gameObject);
+                // Destroy(gameObject);
+				transform.parent.gameObject.SetActive(false);
+				// for NAUTICA: we're disabling this instead of destroying, so when we do training environment reset we can just turn them back on
             }
         }
     }

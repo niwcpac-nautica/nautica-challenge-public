@@ -1,17 +1,12 @@
 # Nautica Challenge
 
-[![docs badge](https://img.shields.io/badge/docs-reference-blue.svg)](https://github.com/niwcpac-nautica/nautica-challenge-public)
+[![docs badge](https://img.shields.io/badge/docs-reference-blue.svg)](https://github.com/zako42/nautica-challenge)
 
 Welcome!
 The **NAUTICA Challenge** will allow participants, NAUTICA students, DoD personnel, collaboration partners, and others to train/implement AI agents to compete against NAUTICA agents and each other within a wargame-like environment!
 
-If you would like to sign up for the challenge make sure you sign up [here](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge+Sign-Up+Sheet)!
-
-To register for a Naval LIFT account using your CAC or yubikey, please make a request:
-1. Visit https://portal.lift.mhpcc.hpc.mil/liftaccounts/logins/signup
-2. Use Richmond Yen, NAUTICA PI as registration POC with my email: richmond.yen@niwc.navy.mil 
-
-
+If you would like to sign up for the challenge make sure you sign up [here]!
+For more intro 
 ## Features
 
 - Updated [Release Notes](ReleaseNotes.md)
@@ -22,16 +17,15 @@ To register for a Naval LIFT account using your CAC or yubikey, please make a re
 ## Releases & Documentation
 
 **Our latest, stable release is `ALPHA`. Click
-[here](https://github.com/niwcpac-nautica/nautica-challenge-public)
+[here](https://github.com/zako42/nautica-challenge/tree/main)
 to get started with the latest release of The NAUTICA Challenge**
 
 
 ## Additional Resources
 
-We have some resources here to help you get started:
-[NAUTICA Challenge Release Notes](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge+Release+Notes)
+We have some resources here to help you get started.
 
-[NAUTICA Challenge Setup](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge+Setup),
+[NAUTICA Challenge Setup](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/Nautica+Challenge+Setup),
 that will allow you to set up the environment.
 
 [NAUTICA Lectures](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/Curriculum+Overview),
@@ -40,15 +34,10 @@ that teach you how to use ML-Agents and machine learning theory.
 [NAUTICA Challenge Agent Training Recommendations](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge+Agent+Training+Recommendations),
 if you get stuck, these tips will help!
 
-[NAUTICA Challenge Environment Information](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/Challenge+Environment+Information),
-to help get you familiarized with our environment!
-
-[NAUTICA Challenge General Information](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/NAUTICA+Challenge),
-your one stop shop for all the Challenge information you can handle!
-
-
 [ML-Agents repository](https://github.com/Unity-Technologies/ml-agents)
 [Open AI Gym URLS](https://wiki.lift.mhpcc.hpc.mil/confluence/display/NAUTICA/Open+AI+Gym+URLs)
+
+
 
 
 ### More from Unity
@@ -60,8 +49,6 @@ your one stop shop for all the Challenge information you can handle!
 The NAUTICA Project would also like to invite anyone that is having problems with
 the installation, setup of the project, how to best train your agents, 
 or any other problems, to please 
-[submit a GitHub issue](https://github.com/niwcpac-nautica/nautica-challenge-public/issues). Make sure to include as much detail as possible!
+[submit a GitHub issue](https://github.com/zako42/nautica-challenge/issues). Make sure to include as much detail as possible!
 
 Thank you so much for supporting the NAUTICA Challenge!
-
-The NAUTICA Team!

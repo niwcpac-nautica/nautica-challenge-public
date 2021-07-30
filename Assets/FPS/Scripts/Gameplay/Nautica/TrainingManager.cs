@@ -11,289 +11,132 @@ using Unity.MLAgents;
 
 namespace Nautica {
     /// <summary>
-    /// Manager for agent training scene.
-    /// During training, we'll disable the GameFlowManager and ObjectiveManager,
-    /// instead of tracking objectives, we'll just check if all enemies are dead.
-    /// If agent runs out of max steps, or all enemies are dead, we'll reset episode.
-    /// Reset will reset the agent and respawn the enemies.
-    /// We also have things in here for managing 2 teams of agents;
+    /// Manager for overall agent training.
+	/// Handles multiple levels prefabs, with agents running in each.
+	/// These levels may be different difficulty (use different level prefabs),
+	/// and will teleport the agent to different levels based on what its
+	/// currentLevel is set to.
+	/// Intent is for currentLevel to be modified by curriculum learning eventually.
+	/// TrainingManager lets TrainingLevelManagers and ResetAnchors handle the
+	/// details of scoring and resetting the levels.
+	/// It does enable/disable levels and teleport agents into the correct levels as needed.
     /// </summary>
     public class TrainingManager : MonoBehaviour
     {
-        public List<GameObject> team1AgentPrefabs = new List<GameObject>();
-        public List<GameObject> team1AgentSpawnPoints = new List<GameObject>();
-        [SerializeField] private List<AbstractNauticaAgent> team1Agents = new List<AbstractNauticaAgent>();
-        [SerializeField] private List<GameObject> team1 = new List<GameObject>();
-        // TODO: future team management for later
-        // public List<GameObject> team2AgentPrefabs = new List<GameObject>();
-        // private List<AbstractNauticaAgent> team2Agents = new List<AbstractNauticaAgent>();
-        // private List<GameObject> team2 = new List<GameObject>();
-        // public Color team1Color;
-        // public Color team2Color;
-
-        // initially we'll only have bots as enemies
-        public List<GameObject> enemyPrefabs = new List<GameObject>();
-        public List<GameObject> enemySpawnPoints = new List<GameObject>();
-        [SerializeField] private List<GameObject> enemies = new List<GameObject>();
-
-        // TODO: pickups
-
+		[SerializeField] private int currentLevel = 0;  // the level we're currently training agents in
+		public int nextLevel = 0;  // if this doesn't match currentLevel, it means we're going to reset to the new level
+		public GameObject agentPrefab;
+		public List<GameObject> levels = new List<GameObject>();
+		private List<TrainingLevelManager> trainingLevelManagers = new List<TrainingLevelManager>();
         public bool humanControl = false;
         public bool debugOutput = false;
         private const string LOGTAG = nameof(TrainingManager);
 
 
-        void Awake()
-        {
-        }
-
         void Start()
         {
-            Init();
-
-			var debugDisplayer = FindObjectOfType<DebugDisplayer>();
-			if (debugDisplayer)
+			foreach (var level in levels)
 			{
-				// TODO: this is a hack, grabs any agent in scene, for now we only have single player
-				debugDisplayer.agent = FindObjectOfType<AbstractNauticaAgent>();
+				var manager = level.GetComponent<TrainingLevelManager>();
+				if (manager)
+				{
+					// disable any level prefabs that are not the correct difficulty level
+					if (manager.level != currentLevel)
+					{
+						manager.gameObject.SetActive(false);
+						continue;
+					}
+
+					// instantiate and setup an agent in the level using the level's agent anchor
+					GameObject agentAnchor = manager.agentAnchor;
+					GameObject newAgent = Instantiate(agentPrefab, agentAnchor.transform.position, agentAnchor.transform.rotation);
+					newAgent.transform.parent = level.transform;
+					manager.SetAgent(newAgent);
+				}
 			}
 
             if (Academy.Instance.IsCommunicatorOn) humanControl = false;  // when in training mode, force agent control
         }
 
-        private void Reset()
-        {
-            if (debugOutput) Debug.unityLogger.Log(LOGTAG, "Resetting environment...");
-            // assume all enemies, agents are already initialized, tracked in lists
-            for (int i=0; i < enemies.Count; i++)
-            {
-                if (i >= enemySpawnPoints.Count) break;
-                ResetBot(enemies[i], enemySpawnPoints[i]);
-            }
-
-            for (int i=0; i < team1.Count; i++)
-            {
-                if (i >= team1AgentSpawnPoints.Count) break;
-                ResetAgent(team1[i], team1AgentSpawnPoints[i]);
-            }
-
-            // TODO: team2
-        }
-
-        private void Init()
-        {
-            // clear out any earlier enemies first, just in case
-            foreach (var enemy in enemies)
-            {
-                Destroy(enemy);
-            }
-            enemies.Clear();
-
-            // clear out any earlier team1 agents first, just in case
-            foreach (var agent in team1)
-            {
-                Destroy(agent);
-            }
-            team1.Clear();
-
-            // TODO: team2
-
-            // spawn all enemies
-            for (int i=0; i < enemyPrefabs.Count; i++)
-            {
-                // assume we have a matching spawnpoint for each prefab, otherwise stop (or could spawn at 0,0,0)
-                if (i >= enemySpawnPoints.Count) break;
-                var instance = SpawnEntity(enemyPrefabs[i], enemySpawnPoints[i]);
-                if (instance)
-                {
-                    enemies.Add(instance);
-                    if (debugOutput) Debug.unityLogger.Log(LOGTAG, "spawned enemy: " + instance.name);
-                }
-            }
-
-            // spawn all team1 agents
-            for (int i=0; i < team1AgentPrefabs.Count; i++)
-            {
-                if (i >= team1AgentSpawnPoints.Count) break;
-                var instance = SpawnEntity(team1AgentPrefabs[i], team1AgentSpawnPoints[i]);
-                if (instance)
-                {
-                    team1.Add(instance);
-                    var agent = instance.GetComponent<AbstractNauticaAgent>();
-                    if (agent)
-                    {
-                        team1Agents.Add(agent);
-                        if (debugOutput) Debug.unityLogger.Log(LOGTAG, "spawned team1 member: " + agent.name);
-                    }
-                }
-            }
-
-            // TODO: team2
-        }
-
-        private GameObject SpawnEntity(GameObject prefab, GameObject spawnpoint)
-        {
-            if (!prefab || !spawnpoint) return null;
-            // TODO: forgot to add rotation as well
-            if (debugOutput) Debug.unityLogger.Log(LOGTAG, "SpawnEntity " + prefab.name);
-            GameObject instance = Instantiate(prefab, spawnpoint.transform.position, spawnpoint.transform.rotation);
-            return instance;
-        }
-
-        private void ResetAgent(GameObject agentObj, GameObject spawnpoint)
-        {
-            if (!agentObj || !spawnpoint) return;
-            if (debugOutput) Debug.unityLogger.Log(LOGTAG, "ResetAgent " + agentObj.name);
-            ResetEntity(agentObj, spawnpoint);
-
-            // any specific agent related stuff
-            var weaponManager = agentObj.GetComponent<PlayerWeaponsManager>();
-            weaponManager.SwitchToWeaponIndex(0);
-            var currentWeapon = weaponManager.GetActiveWeapon();
-            if (currentWeapon) currentWeapon.ResetAmmo();
-            // TODO: note that this is supposed to work, but seems like a timing issue on PlayerCharacterController.cs OnDie() sets to -1 (invalid) after we try to set it
-            // seems like they do this to lower the weapon when dead, so it nicely animates the gun up when starting over
-            // so this is removed in PlayerCharacterController.cs, which is hacky but it works
-        }
-
-        private void ResetBot(GameObject botObj, GameObject spawnpoint)
-        {
-            if (!botObj || !spawnpoint) return;
-            if (debugOutput) Debug.unityLogger.Log(LOGTAG, "ResetBot " + botObj.name);
-            ResetEntity(botObj, spawnpoint);
-
-            // bot specific stuff
-            var detectionModule = botObj.GetComponentInChildren<DetectionModule>();
-            if (detectionModule)
-            {
-                detectionModule.Reset();
-            }
-            var enemyMobile = botObj.GetComponent<EnemyMobile>();
-            if (enemyMobile)
-            {
-                enemyMobile.Reset();
-            }
-        }
-
-        private void ResetEntity(GameObject entity, GameObject spawnpoint)
-        {
-            if (!entity || !spawnpoint) return;
-            if (debugOutput) Debug.unityLogger.Log(LOGTAG, "ResetEntity " + entity.name);
-            entity.SetActive(true);
-            ResetEntityHealth(entity);
-            ResetEntityPos(entity, spawnpoint.transform.position);
-			ResetEntityRot(entity, spawnpoint.transform.rotation);
-            // add more here if theres other stuff to reset
-        }
-
-        private void ResetEntityHealth(GameObject entity)
-        {
-            if (!entity) return;
-            if (debugOutput) Debug.unityLogger.Log(LOGTAG, "ResetEntityHealth on " + entity.name);
-            Health health = entity.GetComponent<Health>();
-            if (health)
-            {
-                health.Revive();
-                if (debugOutput) Debug.unityLogger.Log(LOGTAG, "ResetEntityHealth found and called Revive()");
-            }
-        }
-
-        private void ResetEntityPos(GameObject entity, Vector3 newPos)
-        {
-            if (!entity) return;
-            if (debugOutput) Debug.unityLogger.Log(LOGTAG, "ResetEntityPos with " + entity.name + " to " + newPos.ToString());
-
-            var navmeshAgent = entity.GetComponent<NavMeshAgent>();
-            if (navmeshAgent)
-            {
-                if (debugOutput) Debug.unityLogger.Log(LOGTAG, "ResetEntityPos found NavMeshAgent, calling Warp()");
-                navmeshAgent.Warp(newPos);
-            }
-            else
-            {
-                if (debugOutput) Debug.unityLogger.Log(LOGTAG, "ResetEntityPos no NavMeshAgent, set transform.position");
-                entity.transform.position = new Vector3(newPos.x, newPos.y, newPos.z);
-                var characterController = entity.GetComponent<CharacterController>();
-                if (characterController)
-                {
-                    Physics.SyncTransforms();
-                }
-            }
-
-            // if rigidbody exists, may have physics operating, need to zero out velocities
-            var rb = entity.gameObject.GetComponent<Rigidbody>();
-            if (rb)
-            {
-                rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-                if (debugOutput) Debug.unityLogger.Log(LOGTAG, "ResetEntityPos found and reset rigidbody velocities");
-            }
-        }
-
-		private void ResetEntityRot(GameObject entity, Quaternion rot)
+		private List<TrainingLevelManager> GetLevelManagers(int level)
 		{
-            if (!entity) return;
-            if (debugOutput) Debug.unityLogger.Log(LOGTAG, "ResetEntityRot with " + entity.name + " to " + rot.eulerAngles.ToString());
-			entity.transform.rotation = rot;
+			List<TrainingLevelManager> result = levels.Where(l => l != null)
+				.Select(l => l.GetComponent<TrainingLevelManager>())
+				.Where(t => t.level == level)
+				.ToList();
+			if (debugOutput)
+			{
+				string names = "";
+				foreach (var r in result) names += "\n" + r.gameObject.name;
+				Debug.unityLogger.Log(LOGTAG, "GetLevelManagers: Found " + result.Count.ToString() + " levels with level " + level.ToString() + names);
+			}
+			return result;
 		}
 
-        void FixedUpdate()
-        {
-            bool reset = false;
+		private List<GameObject> GetLevelObjects(int level)
+		{
+			return GetLevelManagers(level)
+				.Select(l => l.gameObject)
+				.ToList();
+		}
 
-            // if all agents dead, trigger end episode
-            if (team1.All(t => t != null && t.GetComponent<Health>()?.CurrentHealth == 0))
-            {
-                // before agents,enemies spawn, they all look dead, so on step0, just skip our checks
-                if (Academy.Instance.StepCount == 0) return;
+		void FixedUpdate()
+		{
+			// if currentLevel changes, we need to update the levels, agents
+			if (nextLevel != currentLevel)
+			{
+				if (debugOutput) Debug.unityLogger.Log(LOGTAG, "Switch from level " + currentLevel.ToString() + " to level " + nextLevel.ToString());
+				List<TrainingLevelManager> oldManagers = GetLevelManagers(currentLevel);
+				List<TrainingLevelManager> newManagers = GetLevelManagers(nextLevel);
 
-                Debug.unityLogger.Log(LOGTAG, "All team1 agents dead!");
+				// NOTE: the counts for the levels are supposed to be the same
+				for (int i=0; i < oldManagers.Count; i++)
+				{
+					// if new levels > old levels, new levels are not enabled
+					if (i < newManagers.Count && newManagers[i] != null)
+					{
+						// re-enable new level prefabs
+						newManagers[i].gameObject.SetActive(true);  // not working??
 
-                // end episode with loss
-                foreach (var agent in team1Agents)
-                {
-                    agent.AddReward(-1.0f);
-                    Debug.unityLogger.Log("AGENT TOTAL REWARD: " + agent.GetCumulativeReward());
-                    agent.EndEpisode();
-                }
-                reset = true;
-            }
+						// move agent over to new level
+						oldManagers[i].agentObj.transform.parent = newManagers[i].gameObject.transform;
 
-            // if all enemies dead, trigger end episode
-            else if (enemies.All(e => e != null && e.GetComponent<Health>().CurrentHealth == 0))
-            {
-                Debug.unityLogger.Log(LOGTAG, "All enemies dead!");
+						// set agent anchor in new levels to point to agent
+						var newAnchor = newManagers[i].agentAnchor.GetComponent<AgentResetAnchor>();
+						var oldAnchor = oldManagers[i].agentAnchor.GetComponent<AgentResetAnchor>();
+						if (newAnchor && oldAnchor)
+						{
+							newAnchor.entity = oldAnchor.entity;
+							oldAnchor.entity = null;
+							// once anchor is set, when the training episode resets,
+							// the new anchor will reset the agent into place
+						}
 
-                // end episode with win
-                foreach (var agent in team1Agents)
-                {
-                    agent.AddReward(1.0f);
-                    Debug.unityLogger.Log("AGENT TOTAL REWARD: " + agent.GetCumulativeReward());
-                    agent.EndEpisode();
-                }
-                reset = true;
-            }
+						// set agent in new level TrainingLevelManager
+						newManagers[i].SetAgent(oldManagers[i].agentObj);
 
-            // if any agent reaches end of episode (MAX_STEPS) we reset everyone to make it easier
-            else if (team1Agents.Any(t => t != null && t.StepCount >= t.MaxStep -1))
-            {
-                Debug.unityLogger.Log(LOGTAG, "Agents reached MAX_STEP");
+						// old manager still pointing to the agent, but it's disabled, should be ok
+						// just in case, unset agent in old manager
+						oldManagers[i].SetAgent(null);
 
-                // reached end of episode, need to reset with no win
-                foreach (var agent in team1Agents)
-                {
-                    agent.AddReward(0f);
-                    Debug.unityLogger.Log("AGENT TOTAL REWARD: " + agent.GetCumulativeReward());
-                    agent.EndEpisode();
-                }
-                reset = true;
-            }
+						// reset the level, which resets the agent's episode and triggers the level OnEpisodeReset event, which should call the anchors to reset
+						newManagers[i].Reset();
+					}
 
-            if (reset)
-            {
-                Debug.unityLogger.Log(LOGTAG, "Trigger Reset Environment...");
-                Reset();
-            }
-        }
+					// disable old level prefabs
+					// if old levels > new levels, the extra old levels agents are disabled along with the old level
+					oldManagers[i].gameObject.SetActive(false);
+				}
+
+				for (int i=oldManagers.Count; i < newManagers.Count; i++)
+				{
+					// if new levels > old levels and somehow did get enabled, turn them off
+					newManagers[i].gameObject.SetActive(false);
+				}
+
+				currentLevel = nextLevel;
+			}
+			// agent end episode should trigger agents to be reset into new anchors
+		}
     }
 }

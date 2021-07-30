@@ -41,6 +41,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player-BotKiller-raycast
       objectReference: {fileID: 0}
+    - target: {fileID: 3367460273720090738, guid: 0c23df8ee07a40d478edf81afff0027e,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 3707233276930023003, guid: 0c23df8ee07a40d478edf81afff0027e,
         type: 3}
       propertyPath: m_RootOrder
@@ -96,15 +101,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4119192019874901875, guid: 0c23df8ee07a40d478edf81afff0027e,
+        type: 3}
+      propertyPath: m_TargetDisplay
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5584547659887620153, guid: 0c23df8ee07a40d478edf81afff0027e,
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: 7c32317e06a87af4c9ae5a20d8d2fc91,
+        type: 3}
     - target: {fileID: 5584547659887620153, guid: 0c23df8ee07a40d478edf81afff0027e,
         type: 3}
       propertyPath: m_BehaviorName
       value: BotKillerRaycast
+      objectReference: {fileID: 0}
+    - target: {fileID: 6172534079824178285, guid: 0c23df8ee07a40d478edf81afff0027e,
+        type: 3}
+      propertyPath: m_TargetDisplay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8055697776622529892, guid: 0c23df8ee07a40d478edf81afff0027e,
+        type: 3}
+      propertyPath: Record
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8055697776622529892, guid: 0c23df8ee07a40d478edf81afff0027e,
+        type: 3}
+      propertyPath: DemonstrationName
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6169973654669177949, guid: 0c23df8ee07a40d478edf81afff0027e, type: 3}

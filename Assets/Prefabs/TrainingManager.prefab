@@ -172,16 +172,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b4f2cc212fc5c84bbcc05b8076ad6f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team1AgentPrefabs:
-  - {fileID: 3367460273720090738, guid: 0c23df8ee07a40d478edf81afff0027e, type: 3}
-  team1AgentSpawnPoints: []
-  team1Agents: []
-  team1: []
-  enemyPrefabs:
-  - {fileID: 1870408342717115092, guid: ad1769cec65df0a4cbaaa01d2e497831, type: 3}
-  - {fileID: 1870408342717115092, guid: ad1769cec65df0a4cbaaa01d2e497831, type: 3}
-  enemySpawnPoints: []
-  enemies: []
+  currentLevel: 0
+  nextLevel: 0
+  agentPrefab: {fileID: 0}
+  levels: []
   humanControl: 0
   debugOutput: 0
 --- !u!1 &5277837679910595956
@@ -293,6 +287,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3067033648935993399}
+  - component: {fileID: 7190385617468292520}
   m_Layer: 5
   m_Name: DebugDisplay
   m_TagString: Untagged
@@ -315,6 +310,22 @@ Transform:
   m_Father: {fileID: 3728654914279013843}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7190385617468292520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5887042278396722360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2cd70a2d00e4344fa3c8e58e02d070e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  obsText: {fileID: 6814563773800174328}
+  actionText: {fileID: 5220766720148338306}
+  rewardText: {fileID: 2609658260821856875}
 --- !u!1 &5912097856937125193
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,8 +439,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6364658108884455651}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 80, z: 0}
+  m_LocalRotation: {x: 0.40557975, y: 0.579228, z: -0.40557975, w: 0.579228}
+  m_LocalPosition: {x: -45, y: 80, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3728654914279013843}
@@ -469,7 +480,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
+  m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -1025,6 +1036,8 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 1315839542190839936, guid: c996b53e9f849234393d1e90f68d1679, type: 3}
     - {fileID: 3244674540524639750, guid: c996b53e9f849234393d1e90f68d1679, type: 3}
+    - {fileID: 1315839542190839938, guid: c996b53e9f849234393d1e90f68d1679, type: 3}
+    - {fileID: 556685733, guid: c996b53e9f849234393d1e90f68d1679, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c996b53e9f849234393d1e90f68d1679, type: 3}
 --- !u!1 &3728654914279013845 stripped
 GameObject:

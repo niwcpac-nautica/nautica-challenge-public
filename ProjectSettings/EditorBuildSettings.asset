@@ -17,7 +17,28 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/FPS/Scenes/MainScene.unity
     guid: d794a2ef8ba31d847ad3c19d03e2ddb9
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/training-test.unity
     guid: 8d2b7bf1eb173e54dbb34c0ca88619e4
+  - enabled: 0
+    path: Assets/Scenes/The Challenge/Level 0.unity
+    guid: 16cb5081edc767e49a43652445420541
+  - enabled: 0
+    path: Assets/Scenes/The Challenge/Level 1.unity
+    guid: 446af064b95f0924984b9b1fbbbde944
+  - enabled: 0
+    path: Assets/Scenes/The Challenge/Level 3.unity
+    guid: 8d2feaa1034e90948aef44e51e32c155
+  - enabled: 0
+    path: Assets/Scenes/The Challenge/Lose.unity
+    guid: 1fc7bcea358c02549b081b304b23ef80
+  - enabled: 0
+    path: Assets/Scenes/The Challenge/Win.unity
+    guid: 2c5e5aa9e4ed25f4386e39bd593280d8
+  - enabled: 0
+    path: Assets/Scenes/The Challenge/Level 2.unity
+    guid: 024fd9f738eec2b45a64f3242748d5b6
+  - enabled: 1
+    path: Assets/Scenes/Training for the Challenge/Training Main Scene.unity
+    guid: 65a0ef57251224842af3f4e44927e1e9
   m_configObjects: {}

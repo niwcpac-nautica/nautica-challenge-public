@@ -70,7 +70,7 @@ namespace Nautica {
         private const string LOGTAG = nameof(AbstractNauticaAgent);
 
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             characterController = GetComponent<PlayerCharacterController>();
             inputHandler = GetComponent<PlayerInputHandler>();
@@ -84,6 +84,10 @@ namespace Nautica {
 			Debug.AssertFormat((enemyBufferSensor != null), "Enemy Buffer Sensor not found!");
 			Debug.AssertFormat((pickupBufferSensor != null), "Pickup Buffer Sensor not found!");
         }
+
+		protected virtual void Start()
+		{
+		}
 
         protected virtual void Update()
         {
@@ -213,7 +217,7 @@ namespace Nautica {
 
 			if (enemyBufferSensor != null)
 			{
-				output += GetEnemyBufferSensorObservations();
+				output += GetEnemyBufferSensorObservations() + "\n\n";
 			}
 
 			if (pickupBufferSensor != null)

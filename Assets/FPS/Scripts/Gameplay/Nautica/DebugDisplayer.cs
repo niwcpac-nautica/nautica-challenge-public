@@ -18,12 +18,9 @@ public class DebugDisplayer : MonoBehaviour
 
     void Start()
     {
-		if (!agent)
-		{
-			agent = FindObjectOfType<AbstractNauticaAgent>();
-			Debug.unityLogger.Log(LOGTAG, "Warning: agent not assigned, grabbing any available agent in scene...");
-		}
-		Debug.AssertFormat(agent, "Could not find any agent in scene!");
+		if (!agent) agent = FindObjectOfType<AbstractNauticaAgent>();
+		// since agent is spawned by TrainingManger, it gets set there
+		// but just in case it's not set by the time we start running, try setting here
     }
 
     void Update()

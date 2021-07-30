@@ -25,9 +25,16 @@ namespace Nautica {
 		private WeaponController weaponController;
 		private List<string> debugEnemyBufferSensorObs = new List<string>();  // this is just for debug display output during testing
 		private List<string> debugPickupBufferSensorObs = new List<string>();  // this is just for debug display output during testing
+		private List<float> enemyAngles = new List<float>();  // testing reward shaping based on angle to enemies
+		private float weaponAmmoRatio;
         private const string LOGTAG = nameof(BotKillerAgent);
 
         private const float minDistanceToEnemy = 30f;
+
+		protected override void Awake()
+		{
+			base.Awake();
+		}
 
         protected override void Start()
         {
@@ -35,13 +42,7 @@ namespace Nautica {
 
 			playerWeaponsManager = GetComponent<PlayerWeaponsManager>();
 			weaponController = playerWeaponsManager?.GetActiveWeapon();
-
-            player = GameObject.FindGameObjectWithTag("Player");
-            enemies = GameObject.FindGameObjectsWithTag("Enemy").ToList<GameObject>();
-            foreach (var e in enemies) trackedEnemyHealth.Add(1f);
-            pickups = GameObject.FindGameObjectsWithTag("Pickup").ToList<GameObject>();
-            // TODO: note that if we change scenes while training, these caches will be incorrect
-        }    
+        }
 
         protected override void Update()
         {
@@ -56,13 +57,21 @@ namespace Nautica {
         public override void OnEpisodeBegin()
         {
             base.OnEpisodeBegin();
-            trackedHealth = 1f;
 
-            // reset tracked enemy healths
-            for (int i=0; i < trackedEnemyHealth.Count; i++)
-            {
-                trackedEnemyHealth[i] = 1f;
-            }
+			// DANGER: this assumes agent is nested under the level prefab
+			// TrainingManager shuffles agents around to different levels, so need to be careful
+			var trainingLevelManager = transform.parent.GetComponent<TrainingLevelManager>();
+			if (!trainingLevelManager)
+			{
+				Debug.unityLogger.Log(LOGTAG, "Could not find TrainingLevelManager!");
+			}
+
+			enemies = trainingLevelManager.enemies;
+			pickups = trainingLevelManager.pickups;
+
+            trackedHealth = 1f;
+			trackedEnemyHealth.Clear();
+			foreach (var e in enemies) trackedEnemyHealth.Add(1f);
 
             // randomize player spawn position
             // lvl = GameObject.FindGameObjectWithTag("Level");
@@ -115,7 +124,7 @@ namespace Nautica {
             }
 
             // self ammo
-			float weaponAmmoRatio = 0f;
+			weaponAmmoRatio = 0f;
 			if (weaponController)
 			{
 				weaponAmmoRatio = weaponController.CurrentAmmoRatio;
@@ -123,7 +132,7 @@ namespace Nautica {
 			sensor.AddObservation(weaponAmmoRatio);
 
             // self crouching, jumping, running (one-hot)
-
+			enemyAngles.Clear();
 			debugEnemyBufferSensorObs.Clear();
 			debugPickupBufferSensorObs.Clear();
 
@@ -156,18 +165,48 @@ namespace Nautica {
                     DebugLogReward(reward, "HIT ENEMY");
                 }
 
-                // do we have line-of-sight to enemy?
+                // do we have line-of-sight to enemy?  see note below to clear up misunderstanding of code
+				// NOTE: the example code below merely checks if the agent has obstacles between itself and the current enemy[i], regardless of which way agent is facing
+				// i.e. you could be facing away from the enemy and if there are no rocks/trees between agent and enemy, result is true
+				// (agent could be facing toward the enemy, but rocks between them, returns false)
+				// the intent is just to know if the agent is moving itself to a good position to have a chance at a clear shot,
+				// and hopefully avoid shooting at enemies which may be nearby but behind a wall, etc
+				// but no idea if this is a useful observation to make.  Might be better to actually take into account the direction the agent is facing
+				// this is left up to the student to do
                 RaycastHit hit;
                 bool los = false;
 				const float raycastDistance = 100.0f;
-				const int layerMask = 1 << 14;
-                if (Physics.SphereCast(transform.position, 1.0f, (enemy.transform.position - transform.position), out hit, raycastDistance, layerMask))
+				Vector3 startpt = new Vector3(transform.position.x, transform.position.y + 1.36f, transform.position.z);  // slight elevation over the ground (based on the enemy bot height)
+                if (Physics.SphereCast(startpt, 0.5f, (enemy.transform.position - transform.position), out hit, raycastDistance))
                 {
-                    // if raycast hit == enemy, LOS raycast is hitting this enemy,
+                    // if raycast hit is hitting the enemy gameobject, LOS = true
                     // otherwise it's hitting an obstacle or a different enemy and is false
-                    if (hit.transform.root.gameObject == enemy) los = true;
+                    if (hit.transform.gameObject == enemy)
+					{
+						los = true;
+						// Debug.DrawRay(startpt, (enemy.transform.position - transform.position), Color.green);
+					}
+					// else
+					// {
+					// 	Debug.DrawRay(startpt, (enemy.transform.position - transform.position), Color.red);
+					// }
                 }
 				float normalizedLos = los ? 1.0f : 0.0f;
+
+				if (enemyNormalizedHealth <= 0.0f)
+				{
+					// if they're dead, zero out observations before saving/sending them below
+					normalizedDistance = 0f;
+					normalizedRelativeBearing = 0f;
+					normalizedHeading = 0f;
+					enemyNormalizedHealth = 0f;
+					normalizedLos = 0f;
+				}
+				else
+				{
+					// if not dead, add their angle to the list of enemy angles to use later -- we're only adding live enemies angles here
+					enemyAngles.Add(Mathf.Abs(normalizedRelativeBearing));
+				}
 
 				float[] enemyObs = { normalizedDistance, normalizedRelativeBearing, normalizedHeading, enemyNormalizedHealth, normalizedLos };
 				enemyBufferSensor.AppendObservation(enemyObs);
@@ -179,10 +218,11 @@ namespace Nautica {
 				AddReward(-1.0f / MaxStep);
             }
 
-			if (pickupBufferSensor != null)
-			{
-				foreach (GameObject pickup in pickups)
+			// if (pickupBufferSensor != null)
+			// {
+				for (int i=0; i < pickups.Count; i++)
 				{
+					var pickup = pickups[i];
 					if (pickup && pickup.activeSelf)
 					{
 						// distance to pickup
@@ -195,12 +235,19 @@ namespace Nautica {
 
 						float[] pickupObs = { normalizedDistance, normalizedRelativeBearing };
 						pickupBufferSensor.AppendObservation(pickupObs);
-						
-						debugPickupBufferSensorObs.Add(string.Format("Pickup: Distance: {0}, RelBearing: {1}",
-							normalizedDistance, normalizedRelativeBearing));
+
+						debugPickupBufferSensorObs.Add(string.Format("Pickup[{0}]\nDistance: {1}\nRelBearing: {2}",
+							i, normalizedDistance, normalizedRelativeBearing));
+					}
+					else
+					{
+						float[] emptyObs = { 0f, 0f };
+						pickupBufferSensor.AppendObservation(emptyObs);
+
+						debugPickupBufferSensorObs.Add(string.Format("Pickup[{0}]\nDistance: {1}\nRelBearing: {2}", i, 0f, 0f));
 					}
 				}
-			}
+			// }
         }
 		
 		protected override string GetEnemyBufferSensorObservations()
@@ -225,6 +272,27 @@ namespace Nautica {
             LookHorizontal = discreteActions[3];
             LookVertical = discreteActions[4];
             // LookVertical = 0f;
+
+			// reward shaping testing: reward based on angle to enemy
+			const float enemy_angle_reward_threshold = 0.1f;  // reward agent if ANY enemies angle is < enemy_angle_reward, agent pointing directly at an enemy and shooting
+			const float enemy_angle_penalty_threshold = 0.5f;  // penalize agent if ALL enemy angles are > enemy_angle_penalty, agent is shooting away from all enemies not even close
+			const float enemy_angle_reward = 0.01f;
+			const float enemy_angle_penalty = -0.01f;
+			// NOTE: this gets called 5 times per step by default,
+			// this is because the agent default DecisionRequester only requests decisions every 5 frames,
+			// and it re-uses the same actions for those 5 frames
+			// since this is called multiple times, the reward below is also processed multiple times.
+			// so scale the reward accordingly
+			if (discreteActions[2] == 1)
+			{
+				// if enemy action is shooting and has ammo to actually fire
+				if (enemyAngles.All(angle => angle > enemy_angle_penalty_threshold))
+				{
+					AddReward(enemy_angle_penalty);
+					// Debug.unityLogger.Log(LOGTAG, "Agent is shooting! Got penalized due to facing wrong direction!!");
+				}
+				// if (enemyAngles.Any(angle => angle < enemy_angle_reward_threshold)) AddReward(enemy_angle_reward);
+			}
         }
 
         // public override void Heuristic(in ActionBuffers actionsOut)

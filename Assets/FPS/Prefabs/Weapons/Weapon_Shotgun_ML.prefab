@@ -77,5 +77,11 @@ PrefabInstance:
       propertyPath: AmmoReloadRate
       value: 3.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8323776800172828795, guid: 31d97e822763d1f4cb769f7e3f7f7333,
+        type: 3}
+      propertyPath: ProjectilePrefab
+      value: 
+      objectReference: {fileID: 2573363985761072357, guid: c4d1eda90cdca0748b0726eff19ab594,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31d97e822763d1f4cb769f7e3f7f7333, type: 3}

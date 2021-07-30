@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
+
 namespace Unity.FPS.AI
 {
     [RequireComponent(typeof(Health), typeof(Actor), typeof(NavMeshAgent))]
@@ -117,13 +118,18 @@ namespace Unity.FPS.AI
         WeaponController m_CurrentWeapon;
         WeaponController[] m_Weapons;
         NavigationModule m_NavigationModule;
+		bool trainingMode = false;
 
         void Start()
         {
-            m_EnemyManager = FindObjectOfType<EnemyManager>();
+			// TODO: separate enemy manager needed per arena
+            // m_EnemyManager = FindObjectOfType<EnemyManager>();
+            m_EnemyManager = GetComponentInParent<EnemyManager>();
             DebugUtility.HandleErrorIfNullFindObject<EnemyManager, EnemyController>(m_EnemyManager, this);
 
-            m_ActorsManager = FindObjectOfType<ActorsManager>();
+			// TODO: separate actor manager needed per arena
+            // m_ActorsManager = FindObjectOfType<ActorsManager>();
+            m_ActorsManager = GetComponentInParent<ActorsManager>();
             DebugUtility.HandleErrorIfNullFindObject<ActorsManager, EnemyController>(m_ActorsManager, this);
 
             m_EnemyManager.RegisterEnemy(this);
@@ -139,6 +145,10 @@ namespace Unity.FPS.AI
 
             m_GameFlowManager = FindObjectOfType<GameFlowManager>();
             // DebugUtility.HandleErrorIfNullFindObject<GameFlowManager, EnemyController>(m_GameFlowManager, this);
+
+			if (GameObject.FindGameObjectWithTag("TrainingManager")) trainingMode = true;
+			// if we find any gameobject named TrainingManager, it means we're in training,
+			// so don't process special effects
 
             // Subscribe to damage & death actions
             m_Health.OnDie += OnDie;
@@ -351,7 +361,8 @@ namespace Unity.FPS.AI
                 m_LastTimeDamaged = Time.time;
             
                 // play the damage tick sound
-                if (DamageTick && !m_WasDamagedThisFrame)
+                // if (DamageTick && !m_WasDamagedThisFrame)
+                if (DamageTick && !m_WasDamagedThisFrame && !trainingMode)
                     AudioUtility.CreateSFX(DamageTick, transform.position, AudioUtility.AudioGroups.DamageTick, 0f);
             
                 m_WasDamagedThisFrame = true;
@@ -361,8 +372,11 @@ namespace Unity.FPS.AI
         void OnDie()
         {
             // spawn a particle system when dying
-            var vfx = Instantiate(DeathVfx, DeathVfxSpawnPoint.position, Quaternion.identity);
-            Destroy(vfx, 5f);
+			if (!trainingMode)
+			{
+				var vfx = Instantiate(DeathVfx, DeathVfxSpawnPoint.position, Quaternion.identity);
+				Destroy(vfx, 5f);
+			}
 
             // tells the game flow manager to handle the enemy destuction
             m_EnemyManager.UnregisterEnemy(this);
