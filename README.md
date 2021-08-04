@@ -16,7 +16,7 @@ For more intro
 
 ## Releases & Documentation
 
-**Our latest, stable release is `ALPHA`. Click
+**Our latest, stable release is `Beta`. Click
 [here](https://github.com/zako42/nautica-challenge/tree/main)
 to get started with the latest release of The NAUTICA Challenge**
 
