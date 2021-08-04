@@ -1,6 +1,6 @@
 # Nautica Challenge
 
-[![docs badge](https://img.shields.io/badge/docs-reference-blue.svg)](https://github.com/zako42/nautica-challenge)
+[![docs badge](https://img.shields.io/badge/docs-reference-blue.svg)](https://github.com/niwcpac-nautica/nautica-challenge-public)
 
 Welcome!
 The **NAUTICA Challenge** will allow participants, NAUTICA students, DoD personnel, collaboration partners, and others to train/implement AI agents to compete against NAUTICA agents and each other within a wargame-like environment!
@@ -17,7 +17,7 @@ For more intro
 ## Releases & Documentation
 
 **Our latest, stable release is `Beta`. Click
-[here](https://github.com/zako42/nautica-challenge/tree/main)
+[here](https://github.com/niwcpac-nautica/nautica-challenge-public)
 to get started with the latest release of The NAUTICA Challenge**
 
 
@@ -49,6 +49,6 @@ if you get stuck, these tips will help!
 The NAUTICA Project would also like to invite anyone that is having problems with
 the installation, setup of the project, how to best train your agents, 
 or any other problems, to please 
-[submit a GitHub issue](https://github.com/zako42/nautica-challenge/issues). Make sure to include as much detail as possible!
+[submit a GitHub issue](https://github.com/niwcpac-nautica/nautica-challenge-public/issues). Make sure to include as much detail as possible!
 
 Thank you so much for supporting the NAUTICA Challenge!
