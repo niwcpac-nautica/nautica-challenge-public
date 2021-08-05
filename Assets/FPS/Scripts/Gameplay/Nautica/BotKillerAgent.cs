@@ -109,10 +109,10 @@ namespace Nautica
 			DisplayReward(reward, "Agent Health");
 		}
 
-		private void DisplayReward(float reward, string healthMsg)
+		private void DisplayReward(float reward, string message)
         {
 			AddReward(reward);
-			DebugLogReward(reward, healthMsg);
+			DebugLogReward(reward, message);
 		}
 
 		private void ObserveAmmo(VectorSensor sensor)
