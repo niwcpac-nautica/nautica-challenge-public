@@ -97,18 +97,22 @@ namespace Nautica
 			var healthComponent = GetComponent<Health>();
 			float normalizedHealth = healthComponent.GetRatio();
 			sensor.AddObservation(normalizedHealth);
-			UpdateTrackedAgentHealthAndRewardAgent(normalizedHealth);
+			UpdateAgentTrackedHealth(normalizedHealth);
 		}
 
-		private void UpdateTrackedAgentHealthAndRewardAgent(float agentHealth)
+		private void UpdateAgentTrackedHealth(float agentHealth)
 		{
-			if (agentHealth != trackedHealth)
-			{
-				float reward = agentHealth - trackedHealth;
-				AddReward(reward);
-				trackedHealth = agentHealth;
-				DebugLogReward(reward, "Agent Health");
-			}
+			if (agentHealth == trackedHealth) return; 
+
+			float reward = agentHealth - trackedHealth;
+			trackedHealth = agentHealth;
+			DisplayHealthReward(reward, "Agent Health");
+		}
+
+		private void DisplayHealthReward(float reward, string healthMsg)
+        {
+			AddReward(reward);
+			DebugLogReward(reward, healthMsg);
 		}
 
 		private void ObserveAmmo(VectorSensor sensor)
@@ -172,19 +176,17 @@ namespace Nautica
 		{
 			var enemyHealthComponent = enemy.GetComponent<Unity.FPS.Game.Health>();
 			float enemyNormalizedHealth = enemyHealthComponent.GetRatio();
-			UpdateTrackedEnemyHealthAndRewardAgent(enemyNormalizedHealth, enemyIndex);
+			UpdateEnemyTrackedHealth(enemyNormalizedHealth, enemyIndex);
 			return enemyNormalizedHealth;
 		}
 
-		private void UpdateTrackedEnemyHealthAndRewardAgent(float enemyHealth, int enemyIndex)
+		private void UpdateEnemyTrackedHealth(float enemyHealth, int enemyIndex)
 		{
-			if (enemyHealth < trackedEnemyHealth[enemyIndex])
-			{
-				float reward = (trackedEnemyHealth[enemyIndex] - enemyHealth);
-				AddReward(reward);
-				trackedEnemyHealth[enemyIndex] = enemyHealth;
-				DebugLogReward(reward, "HIT ENEMY");
-			}
+			if (enemyHealth >= trackedEnemyHealth[enemyIndex]) return; 
+			
+			float reward = (trackedEnemyHealth[enemyIndex] - enemyHealth);
+			trackedEnemyHealth[enemyIndex] = enemyHealth;
+			DisplayHealthReward(reward, "HIT ENEMY");
 		}
 
 		private float DoesAgentHaveLineOfSightOf(GameObject enemy)
