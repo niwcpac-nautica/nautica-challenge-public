@@ -94,7 +94,7 @@ namespace Nautica
 
 		private void ObserveHealth(VectorSensor sensor)
 		{
-			var healthComponent = GetComponent<Unity.FPS.Game.Health>();
+			var healthComponent = GetComponent<Health>();
 			float normalizedHealth = healthComponent.GetRatio();
 			sensor.AddObservation(normalizedHealth);
 			UpdateTrackedAgentHealthAndRewardAgent(normalizedHealth);
