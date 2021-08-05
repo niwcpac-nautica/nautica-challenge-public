@@ -164,17 +164,16 @@ namespace Nautica
 				lineOfSight = DoesAgentHaveLineOfSightOf(enemy);
 				enemyAngles.Add(Mathf.Abs(bearing));
 			}
-			else
-			{
-				health = 0f;
-			}
+
 			float[] observations = { distance, bearing, heading, health, lineOfSight };
 			return observations;
 		}
 
 		private float ObserveEnemyHealth(VectorSensor sensor, GameObject enemy, int enemyIndex)
 		{
-			var enemyHealthComponent = enemy.GetComponent<Unity.FPS.Game.Health>();
+			var enemyHealthComponent = enemy.GetComponent<Health>();
+			if (enemyHealthComponent == null) return 0f; 
+
 			float enemyNormalizedHealth = enemyHealthComponent.GetRatio();
 			UpdateEnemyTrackedHealth(enemyNormalizedHealth, enemyIndex);
 			return enemyNormalizedHealth;
