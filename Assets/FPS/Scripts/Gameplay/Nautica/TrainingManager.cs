@@ -31,6 +31,7 @@ namespace Nautica {
         public bool humanControl = false;
         public bool debugOutput = false;
         private const string LOGTAG = nameof(TrainingManager);
+		public GameObject cloneAgent;
 
 
         void Start()
@@ -50,6 +51,7 @@ namespace Nautica {
 					// instantiate and setup an agent in the level using the level's agent anchor
 					GameObject agentAnchor = manager.agentAnchor;
 					GameObject newAgent = Instantiate(agentPrefab, agentAnchor.transform.position, agentAnchor.transform.rotation);
+					cloneAgent = newAgent;
 					newAgent.transform.parent = level.transform;
 					manager.SetAgent(newAgent);
 				}

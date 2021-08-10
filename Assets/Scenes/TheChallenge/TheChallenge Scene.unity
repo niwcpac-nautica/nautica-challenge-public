@@ -154,12 +154,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 151c358f32acb644488c5429af57c4e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 0
   scoreText: {fileID: 202639265}
-  agent: {fileID: 0}
-  enemies: []
-  trackedHealth: 0
-  trackedEnemyHealth: []
+  enemyHit: 0
+  playerHit: 0
+  train: {fileID: 0}
+  clone: {fileID: 0}
+  botKiller: {fileID: 0}
 --- !u!1001 &433013931
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -225,7 +225,7 @@ PrefabInstance:
     - target: {fileID: 5168981920023250701, guid: 942ede97d2971ac47b907e19b1d74741,
         type: 3}
       propertyPath: m_Name
-      value: Training Level 2
+      value: Challenge Level 2
       objectReference: {fileID: 0}
     - target: {fileID: 7312999174091367780, guid: 942ede97d2971ac47b907e19b1d74741,
         type: 3}
@@ -323,7 +323,7 @@ PrefabInstance:
     - target: {fileID: 2701759562506030881, guid: c7cf6450749521b4abd2098f0510f71a,
         type: 3}
       propertyPath: m_Name
-      value: Training Level 3
+      value: Challenge Level 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7cf6450749521b4abd2098f0510f71a, type: 3}
@@ -354,7 +354,7 @@ PrefabInstance:
     - target: {fileID: 3326092037468460292, guid: 3b811d62fc552a14f9833f5d6fa89e4d,
         type: 3}
       propertyPath: m_Name
-      value: Training Level 1
+      value: Challenge Level 1
       objectReference: {fileID: 0}
     - target: {fileID: 3326092037468460293, guid: 3b811d62fc552a14f9833f5d6fa89e4d,
         type: 3}
@@ -442,7 +442,7 @@ PrefabInstance:
     - target: {fileID: 3907989404675938062, guid: 24f4806f539a3a14683681c8daf5f1ab,
         type: 3}
       propertyPath: m_Name
-      value: Training Level 0
+      value: Challenge Level 0
       objectReference: {fileID: 0}
     - target: {fileID: 6298058507566479534, guid: 24f4806f539a3a14683681c8daf5f1ab,
         type: 3}
@@ -621,6 +621,31 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 3277623179028846451, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 267
+      objectReference: {fileID: 0}
+    - target: {fileID: 3277623179028846451, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 210
+      objectReference: {fileID: 0}
+    - target: {fileID: 3287226906746549928, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 355
+      objectReference: {fileID: 0}
+    - target: {fileID: 3287226906746549928, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 210
+      objectReference: {fileID: 0}
+    - target: {fileID: 3345161822771472517, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3364050899216192569, guid: 1f409385cb77e1642b06322a2fb9f71b,
         type: 3}
       propertyPath: m_IsActive
@@ -656,6 +681,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4570166194801802070, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: enemyHit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570166194801802070, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: playerHit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570166194801802070, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: scoreText
+      value: 
+      objectReference: {fileID: 202639265}
     - target: {fileID: 5053595164199898323, guid: 1f409385cb77e1642b06322a2fb9f71b,
         type: 3}
       propertyPath: agentPrefab
@@ -786,6 +826,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6343447246422750181, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6343447246422750181, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461596296658667091, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 210
       objectReference: {fileID: 0}
     - target: {fileID: 6563213032399217974, guid: 1f409385cb77e1642b06322a2fb9f71b,
         type: 3}
@@ -919,4 +974,5 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 346408024904043549, guid: 1f409385cb77e1642b06322a2fb9f71b, type: 3}
+    - {fileID: 481756884547474093, guid: 1f409385cb77e1642b06322a2fb9f71b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1f409385cb77e1642b06322a2fb9f71b, type: 3}

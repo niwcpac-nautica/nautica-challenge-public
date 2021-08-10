@@ -12,38 +12,38 @@ using Nautica;
 
 namespace Nautica
 {
-
+    /// <summary>
+    /// This class is responsible for having a visual score for the NAUTICA Challenge. It takes the rewards from the BotKillerAgent class that have to do with hitting an enemy or getting hit.
+    /// ScoreManager will be a way for us to score how well an agent does when put to the test in the challenge.
+    /// </summary>
     public class ScoreManager : MonoBehaviour
     {
-
-        public float score;
+        
+        static public float score;
 
         public Text scoreText;
 
-        //public GameObject botKiller;
-        public AbstractNauticaAgent agent;
-        [SerializeField] private List<GameObject> enemies = new List<GameObject>();
-        [SerializeField] private float trackedHealth;
-        [SerializeField] private List<float> trackedEnemyHealth = new List<float>();
+        public float enemyHit;
+        public float playerHit;
 
-        // Start is called before the first frame update
+        public TrainingManager train;
+
+        public GameObject clone;
+        public BotKillerAgent botKiller;
+        
         void Start()
         {
-            scoreText = GetComponent<Text>();
-            if(!agent) agent = FindObjectOfType<AbstractNauticaAgent>();
-            //Debug.unityLogger.Log(AbstractNauticaAgent);
 
-            var trainingLevelManager = transform.parent.GetComponent<TrainingLevelManager>();
-            if (!trainingLevelManager)
-            {
-                Debug.unityLogger.Log( "Could not find TrainingLevelManager!");
-            }
+            if (!train) train = FindObjectOfType<TrainingManager>();
 
-            enemies = trainingLevelManager.enemies;
-
-            trackedHealth = 1f;
-            trackedEnemyHealth.Clear();
-            foreach (var e in enemies) trackedEnemyHealth.Add(1f);
+            clone = train.cloneAgent;
+               
+            
+            //This might be overkill but I needed to reference The BotKillerAgent clone script created by the training manager.
+            botKiller = clone.GetComponent<BotKillerAgent>();
+            playerHit = botKiller.playerHit;
+            enemyHit = botKiller.enemyHit;
+          
         }
         void awake()
         {
@@ -53,51 +53,28 @@ namespace Nautica
         // Update is called once per frame
         void Update()
         {
-
-            var healthComponent = GetComponent<Unity.FPS.Game.Health>();
-            float normalizedHealth = healthComponent.GetRatio();
-
-            if (normalizedHealth != trackedHealth)
-            {
-                float agentHit = normalizedHealth - trackedHealth;
-                score += agentHit;
-                trackedHealth = normalizedHealth;
-                Debug.unityLogger.Log(agentHit + "Agent Health2");
+            //The rewards are saved in the BotKillerAgent and then ported over here. the score only updates if the last score changes from what it was previously.
+            if(playerHit != botKiller.playerHit) {
+                playerHit = botKiller.playerHit;
+                score += playerHit;
             }
-
-            for (int i = 0; i < enemies.Count; i++)
+            else if(enemyHit != botKiller.enemyHit)
             {
-                var enemy = enemies[i];
-                if (!enemy) continue;
-
+                enemyHit = botKiller.enemyHit;
+                score += enemyHit;
+            }
             
-                // enemy health
-                var enemyHealthComponent = enemy.GetComponent<Unity.FPS.Game.Health>();
-                float enemyNormalizedHealth = enemyHealthComponent.GetRatio();
-
-                if (enemyNormalizedHealth < trackedEnemyHealth[i])
-                {
-                    float enemyHit = (trackedEnemyHealth[i] - enemyNormalizedHealth);
-                    score += enemyHit;
-                    trackedEnemyHealth[i] = enemyNormalizedHealth;
-                    Debug.unityLogger.Log(enemyHit + "HIT ENEMY2");
-                }
-
-                
-
-                if (enemyNormalizedHealth <= 0.0f)
-                {
-                    enemyNormalizedHealth = 0f;
-                }
-            }
-
             DisplayScore(score);
-            
+            //Debug.unityLogger.Log("Score: " + score);
         }
+
         void DisplayScore(float scoreToDisplay)
         {
-            scoreText.text = string.Format("{0:0.##}", scoreToDisplay);
-        }
+            scoreText.text = (" " + scoreToDisplay); 
+        } 
+        
+            
     }
 
 }
+ 
