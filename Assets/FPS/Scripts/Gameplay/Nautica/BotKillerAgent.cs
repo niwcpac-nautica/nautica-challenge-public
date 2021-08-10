@@ -106,10 +106,10 @@ namespace Nautica
 
 			float reward = agentHealth - trackedHealth;
 			trackedHealth = agentHealth;
-			DisplayReward(reward, "Agent Health");
+			RewardAgent(reward, "Agent Health");
 		}
 
-		private void DisplayReward(float reward, string message)
+		private void RewardAgent(float reward, string message)
         {
 			AddReward(reward);
 			DebugLogReward(reward, message);
@@ -185,7 +185,7 @@ namespace Nautica
 			
 			float reward = (trackedEnemyHealth[enemyIndex] - enemyHealth);
 			trackedEnemyHealth[enemyIndex] = enemyHealth;
-			DisplayReward(reward, "HIT ENEMY");
+			RewardAgent(reward, "HIT ENEMY");
 		}
 
 		private float DoesAgentHaveLineOfSightOf(GameObject enemy)
