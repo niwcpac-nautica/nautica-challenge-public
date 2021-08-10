@@ -3,6 +3,7 @@ using Unity.FPS.Gameplay;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Nautica;
 
 namespace Unity.FPS.UI
 {
@@ -29,13 +30,16 @@ namespace Unity.FPS.UI
         [Tooltip("GameObject for the controls")]
         public GameObject ControlImage;
 
+
         PlayerInputHandler m_PlayerInputsHandler;
         Health m_PlayerHealth;
         FramerateCounter m_FramerateCounter;
 
         void Start()
         {
-            m_PlayerInputsHandler = FindObjectOfType<PlayerInputHandler>();
+            TrainingManager train = FindObjectOfType<TrainingManager>();
+
+            m_PlayerInputsHandler = train.cloneAgent.GetComponent<PlayerInputHandler>();
             DebugUtility.HandleErrorIfNullFindObject<PlayerInputHandler, InGameMenuManager>(m_PlayerInputsHandler,
                 this);
 
