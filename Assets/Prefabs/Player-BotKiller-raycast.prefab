@@ -132,6 +132,11 @@ PrefabInstance:
       propertyPath: DemonstrationName
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8360542167588937302, guid: 0c23df8ee07a40d478edf81afff0027e,
+        type: 3}
+      propertyPath: debug
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6169973654669177949, guid: 0c23df8ee07a40d478edf81afff0027e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0c23df8ee07a40d478edf81afff0027e, type: 3}

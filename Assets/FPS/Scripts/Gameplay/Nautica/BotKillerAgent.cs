@@ -31,6 +31,7 @@ namespace Nautica
 		private const string LOGTAG = nameof(BotKillerAgent);
 
 		private const float minDistanceToEnemy = 30f;
+		public bool debug = false; 
 
 		protected override void Awake()
 		{
@@ -112,7 +113,10 @@ namespace Nautica
 		private void RewardAgent(float reward, string message)
         {
 			AddReward(reward);
-			DebugLogReward(reward, message);
+			if(debug)
+            {
+				DebugLogReward(reward, message);
+			}
 		}
 
 		private void ObserveAmmo(VectorSensor sensor)
