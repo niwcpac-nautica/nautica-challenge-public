@@ -1,4 +1,7 @@
 ## Beta
+- 12 Aug 2021 Patch release
+  - Restructured/refactored/cleaned-up Botkiller agent script for ease of code review, training, etc.
+  - Known issue: Rare event where the agent may log excessive damage after a single hit, after running up to a bot and then running away.
 - 29 Jul 2021 New feature release
   - All levels are ready for agent training.
     - Switching levels for agent training now easier... just update "next level" (don't change "current level").  
