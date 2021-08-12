@@ -31,6 +31,7 @@ namespace Nautica {
         public bool humanControl = false;
         public bool debugOutput = false;
         private const string LOGTAG = nameof(TrainingManager);
+		public int lastLevel = 3; 
 
 
         void Start()
@@ -139,15 +140,15 @@ namespace Nautica {
 
 		public void SetUpNextLevel()
 		{
+			if (nextLevel >= lastLevel) return;
+
 			if (humanControl)
 			{
 				nextLevel++;
-				Debug.Log("NextLevel determined by human control: " + nextLevel);
 			}
 			else
 			{
 				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level", nextLevel);
-				Debug.Log("NextLevel determined by curriculum learning: " + nextLevel);
 			}
 			
 			SwitchLevel();

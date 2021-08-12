@@ -37,72 +37,111 @@ namespace Nautica {
 		/// <param name="newAgent">The agent to use, or null</param>
 		public void SetAgent(GameObject newAgent)
 		{
+			CreateNewAgent(newAgent);
+			ResetAgentAnchor();
+			SetActorManager();
+		}
+
+		private void CreateNewAgent(GameObject newAgent)
+        {
 			agentObj = newAgent;  // regardless of whether this is null, because we may want to unset it
 
 			if (agentObj)
 			{
 				agent = agentObj.GetComponent<AbstractNauticaAgent>();
 			}
+		}
 
-			if (agentAnchor)
+		private void ResetAgentAnchor()
+        {
+			if (agentAnchor == null) return;
+
+			var agentResetAnchor = agentAnchor.GetComponent<AgentResetAnchor>();
+			if (agentResetAnchor)
 			{
-				var agentResetAnchor = agentAnchor.GetComponent<AgentResetAnchor>();
-				if (agentResetAnchor)
-				{
-					agentResetAnchor.entity = agentObj;
-				}
+				agentResetAnchor.entity = agentObj;
 			}
+		}
 
+		private void SetActorManager()
+        {
 			var actorsManager = GetComponent<ActorsManager>();
-			if (actorsManager)
+
+			if (actorsManager == null) return;
+
+			SetAgentAsPlayerInActorsManager(actorsManager);
+		}
+
+		private void SetAgentAsPlayerInActorsManager(ActorsManager actorsManager)
+        {
+			actorsManager.SetPlayer(agentObj);
+
+			if (agentObj == null) return;
+
+			AddPlayerActorToListOfActors(actorsManager);
+		}
+
+		private void AddPlayerActorToListOfActors(ActorsManager actorsManager)
+        {
+			var agentActor = agentObj.GetComponent<Actor>();
+			if (agentAnchor == null) return;
+
+			if (!actorsManager.Actors.Contains(agentActor))
 			{
-				// set actor manager player
-				actorsManager.SetPlayer(agentObj);
-				if (agentObj)
-				{
-					// add player Actor component to list of actors
-					var agentActor = agentObj.GetComponent<Actor>();
-					if (agentActor)
-					{
-						if (!actorsManager.Actors.Contains(agentActor))
-						{
-							actorsManager.Actors.Add(agentActor);
-						}
-					}
-				}
+				actorsManager.Actors.Add(agentActor);
 			}
 		}
 
 		void FixedUpdate()
 		{
-			if (Academy.Instance.StepCount == 0) return;
-			if (!agentObj || !agent) return;
+			if (AgentDidNotMove()) return;
+			if (AgentDoesNotExistInLevel()) return;
 
-			// check agent dead
+			CheckForEndOfEpisodeEvent();
+		}
+
+		private bool AgentDidNotMove()
+        {
+			return Academy.Instance.StepCount == 0;
+		}
+
+		private bool AgentDoesNotExistInLevel()
+        {
+			return !agentObj || !agent;
+		}
+
+		private void CheckForEndOfEpisodeEvent()
+        {
+			if (AgentIsDead())
+			{
+				RewardAgent(LoseReward, "Agent loses, cumulative reward = ");
+				return;
+			}
+
+			if (AllEnemiesAreDead())
+			{
+				RewardAgent(WinReward, "Agent wins, cumulative reward = ");
+				MoveToNextLevel();
+				return; 
+			}
+
+			if (AgentReachedMaxSteps())
+			{
+				RewardAgent(0.0f, "Agent reached MAX_STEPS, cumulative reward = ");
+			}
+		}
+		
+		private bool AgentIsDead()
+		{
 			var agentHealth = agentObj.GetComponent<Health>();
-			if (agentHealth && agentHealth.CurrentHealth <= 0)
-			{
-				agent.AddReward(LoseReward);
-				Debug.unityLogger.Log(LOGTAG, "Agent loses, cumulative reward = " + agent.GetCumulativeReward());
-				Reset();
-			}
+			return agentHealth && agentHealth.CurrentHealth <= 0;
+		}
 
-			// check all enemies dead
-			else if (enemies.All(e => e != null && e.GetComponent<Health>().CurrentHealth <= 0))
-			{
-				Debug.Log("All enemies are dead");
-				agent.AddReward(WinReward);
-				Debug.unityLogger.Log(LOGTAG, "Agent wins, cumulative reward = " + agent.GetCumulativeReward());
-				Reset();
-                MoveToNextLevel();
-            }
-
-			else if (agent.StepCount >= agent.MaxStep-1)
-			{
-				agent.AddReward(0.0f);
-				Debug.unityLogger.Log(LOGTAG, "Agent reached MAX_STEPS, cumulative reward = " + agent.GetCumulativeReward());
-				Reset();
-			}
+		private void RewardAgent(float reward, String message)
+        {
+			agent.AddReward(reward);
+			Debug.unityLogger.Log(LOGTAG, message + agent.GetCumulativeReward());
+			Reset();
 		}
 
 		public bool AllEnemiesAreDead()
@@ -110,11 +149,15 @@ namespace Nautica {
 			return enemies.All(e => e != null && e.GetComponent<Health>().CurrentHealth <= 0);
 		}
 
+		private bool AgentReachedMaxSteps()
+        {
+			return agent.StepCount >= agent.MaxStep - 1; 
+        }
+
 		private void MoveToNextLevel()
 		{
 			GameObject challengeManager = GameObject.Find("TrainingManager");
 			var trainingManager = challengeManager.GetComponent<TrainingManager>();
-			Debug.Log("Do I ever make it here?");
 			trainingManager.SetUpNextLevel();
 		}
 
