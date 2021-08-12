@@ -33,31 +33,42 @@ namespace Nautica {
         private const string LOGTAG = nameof(TrainingManager);
 		public int lastLevel = 3; 
 
-
         void Start()
+        {
+			SetupLevels();
+
+			if (Academy.Instance.IsCommunicatorOn) humanControl = false;  // when in training mode, force agent control
+        }
+
+		private void SetupLevels()
         {
 			foreach (var level in levels)
 			{
-				var manager = level.GetComponent<TrainingLevelManager>();
-				if (manager)
-				{
-					// disable any level prefabs that are not the correct difficulty level
-					if (manager.level != currentLevel)
-					{
-						manager.gameObject.SetActive(false);
-						continue;
-					}
+				ActivateCurrentLevelOnly(level);
+			}
+		}
 
-					// instantiate and setup an agent in the level using the level's agent anchor
-					GameObject agentAnchor = manager.agentAnchor;
-					GameObject newAgent = Instantiate(agentPrefab, agentAnchor.transform.position, agentAnchor.transform.rotation);
-					newAgent.transform.parent = level.transform;
-					manager.SetAgent(newAgent);
-				}
+		private void ActivateCurrentLevelOnly(GameObject level)
+        {
+			var manager = level.GetComponent<TrainingLevelManager>();
+			if (manager == null) return;
+
+			if (manager.level != currentLevel)
+			{
+				manager.gameObject.SetActive(false);
+				return;
 			}
 
-            if (Academy.Instance.IsCommunicatorOn) humanControl = false;  // when in training mode, force agent control
-        }
+			InstantiateAgentUsingAgentAnchor(level, manager);
+		}
+
+		private void InstantiateAgentUsingAgentAnchor(GameObject level, TrainingLevelManager manager)
+        {
+			GameObject agentAnchor = manager.agentAnchor;
+			GameObject newAgent = Instantiate(agentPrefab, agentAnchor.transform.position, agentAnchor.transform.rotation);
+			newAgent.transform.parent = level.transform;
+			manager.SetAgent(newAgent);
+		}
 
 		private List<TrainingLevelManager> GetLevelManagers(int level)
 		{
