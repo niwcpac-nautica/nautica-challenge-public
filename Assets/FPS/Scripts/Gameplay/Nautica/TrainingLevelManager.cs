@@ -93,6 +93,7 @@ namespace Nautica {
 				agent.AddReward(WinReward);
 				Debug.unityLogger.Log(LOGTAG, "Agent wins, cumulative reward = " + agent.GetCumulativeReward());
 				Reset();
+				MoveToNextLevel();
 			}
 
 			else if (agent.StepCount >= agent.MaxStep-1)
@@ -106,6 +107,13 @@ namespace Nautica {
 		public bool AllEnemiesAreDead()
         {
 			return enemies.All(e => e != null && e.GetComponent<Health>().CurrentHealth <= 0);
+		}
+
+		private void MoveToNextLevel()
+		{
+			GameObject challengeManager = GameObject.Find("TrainingManager");
+			var trainingManager = challengeManager.GetComponent<TrainingManager>();
+			trainingManager.SetUpNextLevel();
 		}
 
 		public void Reset()

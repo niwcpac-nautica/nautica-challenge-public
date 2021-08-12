@@ -64,11 +64,6 @@ namespace Nautica
 			// TrainingManager shuffles agents around to different levels, so need to be careful
 			var trainingLevelManager = transform.parent.GetComponent<TrainingLevelManager>();
 
-			if (trainingLevelManager.AllEnemiesAreDead())
-			{
-				MoveToNextLevel(trainingLevelManager);
-			}
-
 			if (!trainingLevelManager)
 			{
 				Debug.unityLogger.Log(LOGTAG, "Could not find TrainingLevelManager!");
@@ -80,13 +75,6 @@ namespace Nautica
 			trackedHealth = 1f;
 			trackedEnemyHealth.Clear();
 			foreach (var e in enemies) trackedEnemyHealth.Add(1f);
-		}
-
-		private void MoveToNextLevel(TrainingLevelManager trainingLevelManager)
-		{
-			GameObject challengeManager = GameObject.Find("ChallengeManager");
-			var trainingManager = challengeManager.GetComponent<TrainingManager>();
-			trainingManager.SetUpNextLevel();
 		}
 
 		private void DebugLogReward(float reward, string rewardtype)

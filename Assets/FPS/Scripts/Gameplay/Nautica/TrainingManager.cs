@@ -80,65 +80,6 @@ namespace Nautica {
 				.ToList();
 		}
 
-		void FixedUpdate()
-		{
-			// if currentLevel changes, we need to update the levels, agents
-			if (nextLevel != currentLevel)
-			{
-				if (debugOutput) Debug.unityLogger.Log(LOGTAG, "Switch from level " + currentLevel.ToString() + " to level " + nextLevel.ToString());
-				List<TrainingLevelManager> oldManagers = GetLevelManagers(currentLevel);
-				List<TrainingLevelManager> newManagers = GetLevelManagers(nextLevel);
-
-				// NOTE: the counts for the levels are supposed to be the same
-				for (int i=0; i < oldManagers.Count; i++)
-				{
-					// if new levels > old levels, new levels are not enabled
-					if (i < newManagers.Count && newManagers[i] != null)
-					{
-						// re-enable new level prefabs
-						newManagers[i].gameObject.SetActive(true);  // not working??
-
-						// move agent over to new level
-						oldManagers[i].agentObj.transform.parent = newManagers[i].gameObject.transform;
-
-						// set agent anchor in new levels to point to agent
-						var newAnchor = newManagers[i].agentAnchor.GetComponent<AgentResetAnchor>();
-						var oldAnchor = oldManagers[i].agentAnchor.GetComponent<AgentResetAnchor>();
-						if (newAnchor && oldAnchor)
-						{
-							newAnchor.entity = oldAnchor.entity;
-							oldAnchor.entity = null;
-							// once anchor is set, when the training episode resets,
-							// the new anchor will reset the agent into place
-						}
-
-						// set agent in new level TrainingLevelManager
-						newManagers[i].SetAgent(oldManagers[i].agentObj);
-
-						// old manager still pointing to the agent, but it's disabled, should be ok
-						// just in case, unset agent in old manager
-						oldManagers[i].SetAgent(null);
-
-						// reset the level, which resets the agent's episode and triggers the level OnEpisodeReset event, which should call the anchors to reset
-						newManagers[i].Reset();
-					}
-
-					// disable old level prefabs
-					// if old levels > new levels, the extra old levels agents are disabled along with the old level
-					oldManagers[i].gameObject.SetActive(false);
-				}
-
-				for (int i=oldManagers.Count; i < newManagers.Count; i++)
-				{
-					// if new levels > old levels and somehow did get enabled, turn them off
-					newManagers[i].gameObject.SetActive(false);
-				}
-
-				currentLevel = nextLevel;
-			}
-			// agent end episode should trigger agents to be reset into new anchors
-		}
-
 		private void SwitchLevel()
 		{
 			if (nextLevel == currentLevel) return;
