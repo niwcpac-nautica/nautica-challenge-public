@@ -112,16 +112,7 @@ namespace Nautica {
 					// move agent over to new level
 					oldManagers[i].agentObj.transform.parent = newManagers[i].gameObject.transform;
 
-					// set agent anchor in new levels to point to agent
-					var newAnchor = newManagers[i].agentAnchor.GetComponent<AgentResetAnchor>();
-					var oldAnchor = oldManagers[i].agentAnchor.GetComponent<AgentResetAnchor>();
-					if (newAnchor && oldAnchor)
-					{
-						newAnchor.entity = oldAnchor.entity;
-						oldAnchor.entity = null;
-						// once anchor is set, when the training episode resets,
-						// the new anchor will reset the agent into place
-					}
+					SwapToNewAnchor(oldManagers[i], newManagers[i]);
 
 					// set agent in new level TrainingLevelManager
 					newManagers[i].SetAgent(oldManagers[i].agentObj);
@@ -147,6 +138,20 @@ namespace Nautica {
 
 			currentLevel = nextLevel;
 			// agent end episode should trigger agents to be reset into new anchors
+		}
+
+		private void SwapToNewAnchor(TrainingLevelManager oldManager, TrainingLevelManager newManager)
+        {
+			// set agent anchor in new levels to point to agent
+			var newAnchor = oldManager.agentAnchor.GetComponent<AgentResetAnchor>();
+			var oldAnchor = newManager.agentAnchor.GetComponent<AgentResetAnchor>();
+			if (newAnchor && oldAnchor)
+			{
+				newAnchor.entity = oldAnchor.entity;
+				oldAnchor.entity = null;
+				// once anchor is set, when the training episode resets,
+				// the new anchor will reset the agent into place
+			}
 		}
 
 		public void SetUpNextLevel()
