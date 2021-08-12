@@ -94,8 +94,8 @@ namespace Nautica {
 				agent.AddReward(WinReward);
 				Debug.unityLogger.Log(LOGTAG, "Agent wins, cumulative reward = " + agent.GetCumulativeReward());
 				Reset();
-				MoveToNextLevel();
-			}
+                MoveToNextLevel();
+            }
 
 			else if (agent.StepCount >= agent.MaxStep-1)
 			{

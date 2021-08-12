@@ -146,7 +146,7 @@ namespace Nautica {
 			}
 			else
 			{
-				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("next_level", nextLevel);
+				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level", nextLevel);
 				Debug.Log("NextLevel determined by curriculum learning: " + nextLevel);
 			}
 			
