@@ -103,6 +103,11 @@ namespace Nautica {
 			}
 		}
 
+		public bool AllEnemiesAreDead()
+        {
+			return enemies.All(e => e != null && e.GetComponent<Health>().CurrentHealth <= 0);
+		}
+
 		public void Reset()
 		{
 			CleanupLevel();
