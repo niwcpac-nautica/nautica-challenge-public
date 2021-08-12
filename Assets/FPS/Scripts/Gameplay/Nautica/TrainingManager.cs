@@ -142,13 +142,14 @@ namespace Nautica {
 			if (humanControl)
 			{
 				nextLevel++;
+				Debug.Log("NextLevel determined by human control: " + nextLevel);
 			}
 			else
 			{
-				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level", nextLevel);
+				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("next_level", nextLevel);
+				Debug.Log("NextLevel determined by curriculum learning: " + nextLevel);
 			}
-
-			Debug.Log("NextLevel: " + nextLevel);
+			
 			SwitchLevel();
 		}
 	}

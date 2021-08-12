@@ -90,6 +90,7 @@ namespace Nautica {
 			// check all enemies dead
 			else if (enemies.All(e => e != null && e.GetComponent<Health>().CurrentHealth <= 0))
 			{
+				Debug.Log("All enemies are dead");
 				agent.AddReward(WinReward);
 				Debug.unityLogger.Log(LOGTAG, "Agent wins, cumulative reward = " + agent.GetCumulativeReward());
 				Reset();
@@ -113,6 +114,7 @@ namespace Nautica {
 		{
 			GameObject challengeManager = GameObject.Find("TrainingManager");
 			var trainingManager = challengeManager.GetComponent<TrainingManager>();
+			Debug.Log("Do I ever make it here?");
 			trainingManager.SetUpNextLevel();
 		}
 
