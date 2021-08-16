@@ -28,16 +28,21 @@ namespace Nautica {
 		public GameObject agentPrefab;
 		public List<GameObject> levels = new List<GameObject>();
 		private List<TrainingLevelManager> trainingLevelManagers = new List<TrainingLevelManager>();
-        public bool humanControl = false;
+		public bool humanControl = false;
+		private bool inTrainingMode = false; 
         public bool debugOutput = false;
         private const string LOGTAG = nameof(TrainingManager);
-		public int lastLevel = 3; 
+		public int lastLevel = 3;
 
         void Start()
         {
 			SetupLevels();
 
-			if (Academy.Instance.IsCommunicatorOn) humanControl = false;  // when in training mode, force agent control
+			if (Academy.Instance.IsCommunicatorOn)
+			{
+				humanControl = false;  // when in training mode, force agent control
+				inTrainingMode = true;
+			}
         }
 
 		private void SetupLevels()
@@ -158,15 +163,17 @@ namespace Nautica {
 		{
 			if (nextLevel >= lastLevel) return;
 
-			if (humanControl)
+			if (inTrainingMode)
 			{
-				nextLevel++;
+				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level", nextLevel);
+				Debug.Log("nextLevel via Training mode: " + nextLevel);
 			}
 			else
 			{
-				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level", nextLevel);
+				nextLevel++;
+				Debug.Log("nextLevel via humanControl: " + nextLevel);
 			}
-			
+
 			SwitchLevel();
 		}
 	}
