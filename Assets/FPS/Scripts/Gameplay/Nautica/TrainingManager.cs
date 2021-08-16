@@ -33,17 +33,27 @@ namespace Nautica {
         public bool debugOutput = false;
         private const string LOGTAG = nameof(TrainingManager);
 		public int lastLevel = 3;
+		private bool inChallengeTrials = false;
 
         void Start()
         {
+			SetupEnvironmentMode();
 			SetupLevels();
+		}
 
+		private void SetupEnvironmentMode()
+		{
 			if (Academy.Instance.IsCommunicatorOn)
 			{
 				humanControl = false;  // when in training mode, force agent control
 				inTrainingMode = true;
 			}
-        }
+
+			if(this.transform.parent.name == "ChallengeManager")
+            {
+				inChallengeTrials = true;
+            }
+		}
 
 		private void SetupLevels()
         {
@@ -163,15 +173,13 @@ namespace Nautica {
 		{
 			if (nextLevel >= lastLevel) return;
 
-			if (inTrainingMode)
+			if (inTrainingMode && !inChallengeTrials) //TODO: test w/ Nick's Score-Manager branch to see if inChallengeTrials work
 			{
 				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level", nextLevel);
-				Debug.Log("nextLevel via Training mode: " + nextLevel);
 			}
 			else
 			{
 				nextLevel++;
-				Debug.Log("nextLevel via humanControl: " + nextLevel);
 			}
 
 			SwitchLevel();
