@@ -63,6 +63,7 @@ namespace Nautica
 			// DANGER: this assumes agent is nested under the level prefab
 			// TrainingManager shuffles agents around to different levels, so need to be careful
 			var trainingLevelManager = transform.parent.GetComponent<TrainingLevelManager>();
+
 			if (!trainingLevelManager)
 			{
 				Debug.unityLogger.Log(LOGTAG, "Could not find TrainingLevelManager!");
@@ -294,9 +295,7 @@ namespace Nautica
 			LookVertical = discreteActions[4];
 
 			// reward shaping testing: reward based on angle to enemy
-			const float enemy_angle_reward_threshold = 0.1f;  // reward agent if ANY enemies angle is < enemy_angle_reward, agent pointing directly at an enemy and shooting
 			const float enemy_angle_penalty_threshold = 0.5f;  // penalize agent if ALL enemy angles are > enemy_angle_penalty, agent is shooting away from all enemies not even close
-			const float enemy_angle_reward = 0.01f;
 			const float enemy_angle_penalty = -0.01f;
 			// NOTE: this gets called 5 times per step by default,
 			// this is because the agent default DecisionRequester only requests decisions every 5 frames,
