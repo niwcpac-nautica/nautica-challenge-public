@@ -156,10 +156,29 @@ namespace Nautica {
 
 		private void MoveToNextLevel()
 		{
-			GameObject challengeManager = GameObject.Find("TrainingManager");
-			var trainingManager = challengeManager.GetComponent<TrainingManager>();
+			GameObject manager = FindManager();
+			if (manager == null) return;
+
+			var trainingManager = manager.GetComponent<TrainingManager>();
 			trainingManager.SetUpNextLevel();
 		}
+
+		private GameObject FindManager()
+        {
+			GameObject manager = GameObject.Find("TrainingManager");
+			if (manager != null)
+			{
+				return manager;
+			}
+
+			manager = GameObject.Find("ChallengeManager");
+			if (manager != null)
+			{
+				return manager;
+			}
+
+			return null;
+        }
 
 		public void Reset()
 		{
