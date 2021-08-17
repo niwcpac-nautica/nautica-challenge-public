@@ -58,6 +58,26 @@ namespace Nautica {
 
 		private void SetupLevels()
         {
+			SetupEnvironmentMode();
+			SetupLevels();
+		}
+
+		private void SetupEnvironmentMode()
+		{
+			if (Academy.Instance.IsCommunicatorOn)
+			{
+				humanControl = false;  // when in training mode, force agent control
+				inTrainingMode = true;
+			}
+
+			if(this.transform.parent.name == "ChallengeManager")
+            {
+				inChallengeTrials = true;
+            }
+		}
+
+		private void SetupLevels()
+        {
 			foreach (var level in levels)
 			{
 				ActivateCurrentLevelOnly(level);
