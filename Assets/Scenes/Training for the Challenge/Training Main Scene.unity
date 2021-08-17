@@ -864,6 +864,11 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 5053595164199898323, guid: 1f409385cb77e1642b06322a2fb9f71b,
         type: 3}
+      propertyPath: humanControl
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5053595164199898323, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
       propertyPath: levels.Array.size
       value: 8
       objectReference: {fileID: 0}

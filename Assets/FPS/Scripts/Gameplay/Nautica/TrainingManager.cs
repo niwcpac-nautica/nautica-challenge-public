@@ -28,35 +28,62 @@ namespace Nautica {
 		public GameObject agentPrefab;
 		public List<GameObject> levels = new List<GameObject>();
 		private List<TrainingLevelManager> trainingLevelManagers = new List<TrainingLevelManager>();
-        public bool humanControl = false;
+		public bool humanControl = false;
+		private bool inTrainingMode = false; 
         public bool debugOutput = false;
         private const string LOGTAG = nameof(TrainingManager);
-
+		public int lastLevel = 3;
+		private bool inChallengeTrials = false;
 
         void Start()
         {
-			foreach (var level in levels)
-			{
-				var manager = level.GetComponent<TrainingLevelManager>();
-				if (manager)
-				{
-					// disable any level prefabs that are not the correct difficulty level
-					if (manager.level != currentLevel)
-					{
-						manager.gameObject.SetActive(false);
-						continue;
-					}
+			SetupEnvironmentMode();
+			SetupLevels();
+		}
 
-					// instantiate and setup an agent in the level using the level's agent anchor
-					GameObject agentAnchor = manager.agentAnchor;
-					GameObject newAgent = Instantiate(agentPrefab, agentAnchor.transform.position, agentAnchor.transform.rotation);
-					newAgent.transform.parent = level.transform;
-					manager.SetAgent(newAgent);
-				}
+		private void SetupEnvironmentMode()
+		{
+			if (Academy.Instance.IsCommunicatorOn)
+			{
+				humanControl = false;  // when in training mode, force agent control
+				inTrainingMode = true;
 			}
 
-            if (Academy.Instance.IsCommunicatorOn) humanControl = false;  // when in training mode, force agent control
-        }
+			if(this.transform.parent.name == "ChallengeManager")
+            {
+				inChallengeTrials = true;
+            }
+		}
+
+		private void SetupLevels()
+        {
+			foreach (var level in levels)
+			{
+				ActivateCurrentLevelOnly(level);
+			}
+		}
+
+		private void ActivateCurrentLevelOnly(GameObject level)
+        {
+			var manager = level.GetComponent<TrainingLevelManager>();
+			if (manager == null) return;
+
+			if (manager.level != currentLevel)
+			{
+				manager.gameObject.SetActive(false);
+				return;
+			}
+
+			InstantiateAgentUsingAgentAnchor(level, manager);
+		}
+
+		private void InstantiateAgentUsingAgentAnchor(GameObject level, TrainingLevelManager manager)
+        {
+			GameObject agentAnchor = manager.agentAnchor;
+			GameObject newAgent = Instantiate(agentPrefab, agentAnchor.transform.position, agentAnchor.transform.rotation);
+			newAgent.transform.parent = level.transform;
+			manager.SetAgent(newAgent);
+		}
 
 		private List<TrainingLevelManager> GetLevelManagers(int level)
 		{
@@ -80,63 +107,82 @@ namespace Nautica {
 				.ToList();
 		}
 
-		void FixedUpdate()
+		private void SwitchLevel()
 		{
-			// if currentLevel changes, we need to update the levels, agents
-			if (nextLevel != currentLevel)
+			if (nextLevel == currentLevel) return;
+
+			if (debugOutput) Debug.unityLogger.Log(LOGTAG, "Switch from level " + currentLevel.ToString() + " to level " + nextLevel.ToString());
+			List<TrainingLevelManager> oldManagers = GetLevelManagers(currentLevel);
+			List<TrainingLevelManager> newManagers = GetLevelManagers(nextLevel);
+
+			// NOTE: the counts for the levels are supposed to be the same
+			for (int i = 0; i < oldManagers.Count; i++)
 			{
-				if (debugOutput) Debug.unityLogger.Log(LOGTAG, "Switch from level " + currentLevel.ToString() + " to level " + nextLevel.ToString());
-				List<TrainingLevelManager> oldManagers = GetLevelManagers(currentLevel);
-				List<TrainingLevelManager> newManagers = GetLevelManagers(nextLevel);
-
-				// NOTE: the counts for the levels are supposed to be the same
-				for (int i=0; i < oldManagers.Count; i++)
+				// if new levels > old levels, new levels are not enabled
+				if (i < newManagers.Count && newManagers[i] != null)
 				{
-					// if new levels > old levels, new levels are not enabled
-					if (i < newManagers.Count && newManagers[i] != null)
-					{
-						// re-enable new level prefabs
-						newManagers[i].gameObject.SetActive(true);  // not working??
+					// re-enable new level prefabs
+					newManagers[i].gameObject.SetActive(true);  // not working??
 
-						// move agent over to new level
-						oldManagers[i].agentObj.transform.parent = newManagers[i].gameObject.transform;
+					// move agent over to new level
+					oldManagers[i].agentObj.transform.parent = newManagers[i].gameObject.transform;
 
-						// set agent anchor in new levels to point to agent
-						var newAnchor = newManagers[i].agentAnchor.GetComponent<AgentResetAnchor>();
-						var oldAnchor = oldManagers[i].agentAnchor.GetComponent<AgentResetAnchor>();
-						if (newAnchor && oldAnchor)
-						{
-							newAnchor.entity = oldAnchor.entity;
-							oldAnchor.entity = null;
-							// once anchor is set, when the training episode resets,
-							// the new anchor will reset the agent into place
-						}
+					SwapToNewAnchor(oldManagers[i], newManagers[i]);
 
-						// set agent in new level TrainingLevelManager
-						newManagers[i].SetAgent(oldManagers[i].agentObj);
+					// set agent in new level TrainingLevelManager
+					newManagers[i].SetAgent(oldManagers[i].agentObj);
 
-						// old manager still pointing to the agent, but it's disabled, should be ok
-						// just in case, unset agent in old manager
-						oldManagers[i].SetAgent(null);
+					// old manager still pointing to the agent, but it's disabled, should be ok
+					// just in case, unset agent in old manager
+					oldManagers[i].SetAgent(null);
 
-						// reset the level, which resets the agent's episode and triggers the level OnEpisodeReset event, which should call the anchors to reset
-						newManagers[i].Reset();
-					}
-
-					// disable old level prefabs
-					// if old levels > new levels, the extra old levels agents are disabled along with the old level
-					oldManagers[i].gameObject.SetActive(false);
+					// reset the level, which resets the agent's episode and triggers the level OnEpisodeReset event, which should call the anchors to reset
+					newManagers[i].Reset();
 				}
 
-				for (int i=oldManagers.Count; i < newManagers.Count; i++)
-				{
-					// if new levels > old levels and somehow did get enabled, turn them off
-					newManagers[i].gameObject.SetActive(false);
-				}
-
-				currentLevel = nextLevel;
+				// disable old level prefabs
+				// if old levels > new levels, the extra old levels agents are disabled along with the old level
+				oldManagers[i].gameObject.SetActive(false);
 			}
+
+			for (int i = oldManagers.Count; i < newManagers.Count; i++)
+			{
+				// if new levels > old levels and somehow did get enabled, turn them off
+				newManagers[i].gameObject.SetActive(false);
+			}
+
+			currentLevel = nextLevel;
 			// agent end episode should trigger agents to be reset into new anchors
 		}
-    }
+
+		private void SwapToNewAnchor(TrainingLevelManager oldManager, TrainingLevelManager newManager)
+        {
+			// set agent anchor in new levels to point to agent
+			var newAnchor = oldManager.agentAnchor.GetComponent<AgentResetAnchor>();
+			var oldAnchor = newManager.agentAnchor.GetComponent<AgentResetAnchor>();
+			if (newAnchor && oldAnchor)
+			{
+				newAnchor.entity = oldAnchor.entity;
+				oldAnchor.entity = null;
+				// once anchor is set, when the training episode resets,
+				// the new anchor will reset the agent into place
+			}
+		}
+
+		public void SetUpNextLevel()
+		{
+			if (nextLevel >= lastLevel) return;
+
+			if (inTrainingMode && !inChallengeTrials) //TODO: test w/ Nick's Score-Manager branch to see if inChallengeTrials work
+			{
+				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level", nextLevel);
+			}
+			else
+			{
+				nextLevel++;
+			}
+
+			SwitchLevel();
+		}
+	}
 }
