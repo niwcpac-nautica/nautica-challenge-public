@@ -1,6 +1,7 @@
 ﻿using Unity.FPS.Game;
 using Unity.FPS.Gameplay;
 using UnityEngine;
+using Nautica;
 
 namespace Unity.FPS.UI
 {
@@ -11,10 +12,12 @@ namespace Unity.FPS.UI
 
         [Tooltip("Prefab for the notifications")]
         public GameObject NotificationPrefab;
-
+ 
         void Awake()
         {
-            PlayerWeaponsManager playerWeaponsManager = FindObjectOfType<PlayerWeaponsManager>();
+            TrainingManager train = FindObjectOfType<TrainingManager>();
+          
+            PlayerWeaponsManager playerWeaponsManager = train.cloneAgent.GetComponent<PlayerWeaponsManager>();
             DebugUtility.HandleErrorIfNullFindObject<PlayerWeaponsManager, NotificationHUDManager>(playerWeaponsManager,
                 this);
             playerWeaponsManager.OnAddedWeapon += OnPickupWeapon;

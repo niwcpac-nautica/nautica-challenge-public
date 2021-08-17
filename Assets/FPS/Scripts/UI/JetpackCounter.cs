@@ -2,7 +2,7 @@
 using Unity.FPS.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Nautica;
 namespace Unity.FPS.UI
 {
     public class JetpackCounter : MonoBehaviour
@@ -20,7 +20,9 @@ namespace Unity.FPS.UI
 
         void Awake()
         {
-            m_Jetpack = FindObjectOfType<Jetpack>();
+            TrainingManager train = FindObjectOfType<TrainingManager>();
+            
+            m_Jetpack = train.cloneAgent.GetComponent<Jetpack>();
             DebugUtility.HandleErrorIfNullFindObject<Jetpack, JetpackCounter>(m_Jetpack, this);
 
             FillBarColorChange.Initialize(1f, 0f);

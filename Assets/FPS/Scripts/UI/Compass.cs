@@ -2,6 +2,7 @@
 using Unity.FPS.Game;
 using Unity.FPS.Gameplay;
 using UnityEngine;
+using Nautica;
 
 namespace Unity.FPS.UI
 {
@@ -24,7 +25,9 @@ namespace Unity.FPS.UI
 
         void Awake()
         {
-            PlayerCharacterController playerCharacterController = FindObjectOfType<PlayerCharacterController>();
+            TrainingManager train = FindObjectOfType<TrainingManager>();
+
+            PlayerCharacterController playerCharacterController = train.cloneAgent.GetComponent<PlayerCharacterController>();
             DebugUtility.HandleErrorIfNullFindObject<PlayerCharacterController, Compass>(playerCharacterController,
                 this);
             m_PlayerTransform = playerCharacterController.transform;
