@@ -34,8 +34,9 @@ namespace Nautica {
         private const string LOGTAG = nameof(TrainingManager);
 		public int lastLevel = 3;
 		private bool inChallengeTrials = false;
+		public GameObject cloneAgent;
 
-        void Start()
+		void Start()
         {
 			SetupEnvironmentMode();
 			SetupLevels();
@@ -81,6 +82,7 @@ namespace Nautica {
         {
 			GameObject agentAnchor = manager.agentAnchor;
 			GameObject newAgent = Instantiate(agentPrefab, agentAnchor.transform.position, agentAnchor.transform.rotation);
+			cloneAgent = newAgent;
 			newAgent.transform.parent = level.transform;
 			manager.SetAgent(newAgent);
 		}
