@@ -15,9 +15,7 @@ namespace Unity.FPS.UI
  
         void Awake()
         {
-            TrainingManager train = FindObjectOfType<TrainingManager>();
-          
-            PlayerWeaponsManager playerWeaponsManager = train.cloneAgent.GetComponent<PlayerWeaponsManager>();
+            PlayerWeaponsManager playerWeaponsManager = FindObjectOfType<PlayerWeaponsManager>();
             DebugUtility.HandleErrorIfNullFindObject<PlayerWeaponsManager, NotificationHUDManager>(playerWeaponsManager,
                 this);
             playerWeaponsManager.OnAddedWeapon += OnPickupWeapon;

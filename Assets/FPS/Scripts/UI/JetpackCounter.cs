@@ -20,9 +20,7 @@ namespace Unity.FPS.UI
 
         void Awake()
         {
-            TrainingManager train = FindObjectOfType<TrainingManager>();
-            
-            m_Jetpack = train.cloneAgent.GetComponent<Jetpack>();
+            m_Jetpack = FindObjectOfType<Jetpack>();
             DebugUtility.HandleErrorIfNullFindObject<Jetpack, JetpackCounter>(m_Jetpack, this);
 
             FillBarColorChange.Initialize(1f, 0f);

@@ -25,9 +25,7 @@ namespace Unity.FPS.UI
 
         void Awake()
         {
-            TrainingManager train = FindObjectOfType<TrainingManager>();
-
-            PlayerCharacterController playerCharacterController = train.cloneAgent.GetComponent<PlayerCharacterController>();
+            PlayerCharacterController playerCharacterController = FindObjectOfType<PlayerCharacterController>();
             DebugUtility.HandleErrorIfNullFindObject<PlayerCharacterController, Compass>(playerCharacterController,
                 this);
             m_PlayerTransform = playerCharacterController.transform;

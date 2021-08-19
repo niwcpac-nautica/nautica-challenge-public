@@ -37,9 +37,7 @@ namespace Unity.FPS.UI
 
         void Start()
         {
-            TrainingManager train = FindObjectOfType<TrainingManager>();
-
-            m_PlayerInputsHandler = train.cloneAgent.GetComponent<PlayerInputHandler>();
+            m_PlayerInputsHandler = FindObjectOfType<PlayerInputHandler>();
             DebugUtility.HandleErrorIfNullFindObject<PlayerInputHandler, InGameMenuManager>(m_PlayerInputsHandler,
                 this);
 

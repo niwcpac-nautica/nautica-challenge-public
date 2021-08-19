@@ -14,8 +14,6 @@ namespace Nautica {
     /// </summary>
     public class BotKillerAgent : AbstractNauticaAgent
     {
-        public float enemyHit;
-        public float playerHit;
         [SerializeField] private List<GameObject> enemies = new List<GameObject>();
         [SerializeField] private List<GameObject> pickups = new List<GameObject>();
         [SerializeField] private GameObject lvl;
@@ -108,7 +106,7 @@ namespace Nautica {
 			if (agentHealth == trackedHealth) return; 
 
 			float reward = agentHealth - trackedHealth;
-			playerHit = reward;
+			SetPlayerHitScore(reward);
 			trackedHealth = agentHealth;
 			RewardAgent(reward, "Agent Health");
 		}
@@ -191,7 +189,7 @@ namespace Nautica {
 			if (enemyHealth >= trackedEnemyHealth[enemyIndex]) return; 
 			
 			float reward = (trackedEnemyHealth[enemyIndex] - enemyHealth);
-			enemyHit = reward;
+			SetEnemyHitScore(reward);
 			trackedEnemyHealth[enemyIndex] = enemyHealth;
 			RewardAgent(reward, "HIT ENEMY");
 		}

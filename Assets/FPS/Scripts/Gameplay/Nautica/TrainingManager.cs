@@ -34,12 +34,14 @@ namespace Nautica {
         private const string LOGTAG = nameof(TrainingManager);
 		public int lastLevel = 3;
 		private bool inChallengeTrials = false;
-		public GameObject cloneAgent;
+		private TrainingLevelManager currentLevelManager;
+		private ScoreManager scoreManager;
 
 		void Start()
         {
 			SetupEnvironmentMode();
 			SetupLevels();
+			scoreManager = FindObjectOfType<ScoreManager>();
 		}
 
 		private void SetupEnvironmentMode()
@@ -82,10 +84,21 @@ namespace Nautica {
         {
 			GameObject agentAnchor = manager.agentAnchor;
 			GameObject newAgent = Instantiate(agentPrefab, agentAnchor.transform.position, agentAnchor.transform.rotation);
-			cloneAgent = newAgent;
+			currentLevelManager = manager;
 			newAgent.transform.parent = level.transform;
 			manager.SetAgent(newAgent);
 		}
+
+		public AbstractNauticaAgent GetAgent()
+		{
+			AbstractNauticaAgent agent = currentLevelManager.GetAgent();
+			return agent;
+		}
+
+		public void ResetScoreDisplay()
+        {
+			scoreManager.ResetScore();
+        }
 
 		private List<TrainingLevelManager> GetLevelManagers(int level)
 		{

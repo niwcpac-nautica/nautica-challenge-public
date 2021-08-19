@@ -26,55 +26,86 @@ namespace Nautica
         public float enemyHit;
         public float playerHit;
 
-        public TrainingManager train;
-
-        public GameObject clone;
-        public BotKillerAgent botKiller;
+        public TrainingManager trainingManager;
+        private AbstractNauticaAgent agent;
+        private float newPlayerhitScore;
+        private float newEnemyHitscore;
         
         void Start()
         {
-
-            if (!train) train = FindObjectOfType<TrainingManager>();
-
-            clone = train.cloneAgent;
-               
-            
-            //This might be overkill but I needed to reference The BotKillerAgent clone script created by the training manager.
-            botKiller = clone.GetComponent<BotKillerAgent>();
-            playerHit = botKiller.playerHit;
-            enemyHit = botKiller.enemyHit;
-          
+            InitializeScores();
         }
-        void awake()
+
+        private void InitializeScores()
+        {
+            if (!trainingManager) trainingManager = FindObjectOfType<TrainingManager>();
+
+            agent = trainingManager.GetAgent();
+
+            playerHit = agent.GetPlayerHitScore();
+            enemyHit = agent.GetEnemyHitScore();
+        }
+
+        void Awake()
         {
             DontDestroyOnLoad(transform.gameObject);
         }
 
-        // Update is called once per frame
         void Update()
         {
-            //The rewards are saved in the BotKillerAgent and then ported over here. the score only updates if the last score changes from what it was previously.
-            if(playerHit != botKiller.playerHit) {
-                playerHit = botKiller.playerHit;
-                score += playerHit;
-            }
-            else if(enemyHit != botKiller.enemyHit)
-            {
-                enemyHit = botKiller.enemyHit;
-                score += enemyHit;
-            }
+            newEnemyHitscore = agent.GetEnemyHitScore();
+            newPlayerhitScore = agent.GetPlayerHitScore();
+
+            UpdateScore();
             
             DisplayScore(score);
-            //Debug.unityLogger.Log("Score: " + score);
+        }
+
+        private void UpdateScore()
+        {
+            if(PlayerWasHit())
+            {
+                SetNewPlayerHitScore();
+            }
+            else if(EnemyWasHit())
+            {
+                SetNewEnemyHitScore();
+            }
+        }
+
+        private bool PlayerWasHit()
+        {
+            return playerHit != newPlayerhitScore;
+        }
+
+        private bool EnemyWasHit()
+        {
+            return enemyHit != newEnemyHitscore;
+        }
+
+        private void SetNewPlayerHitScore()
+        {
+            playerHit = newPlayerhitScore;
+            score += playerHit;
+        }
+
+        private void SetNewEnemyHitScore()
+        {
+            enemyHit = newEnemyHitscore;
+            score += enemyHit;
+        }
+
+        public void ResetScore()
+        {
+            playerHit = 0f;
+            enemyHit = 0f;
+            DisplayScore(0f);
         }
 
         void DisplayScore(float scoreToDisplay)
         {
             scoreText.text = (" " + scoreToDisplay); 
         } 
-        
-            
     }
-
 }
  
