@@ -193,7 +193,6 @@ namespace Nautica {
 		public void Reset()
 		{
 			CleanupLevel();
-			trainingManager.ResetScoreDisplay();
 			agent?.EndEpisode();
 			OnEpisodeReset?.Invoke();
 		}

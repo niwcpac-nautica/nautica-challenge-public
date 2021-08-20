@@ -18,9 +18,6 @@ namespace Nautica
     /// </summary>
     public class ScoreManager : MonoBehaviour
     {
-        
-        static public float score;
-
         public Text scoreText;
 
         public float enemyHit;
@@ -28,8 +25,7 @@ namespace Nautica
 
         public TrainingManager trainingManager;
         private AbstractNauticaAgent agent;
-        private float newPlayerhitScore;
-        private float newEnemyHitscore;
+        private float score;
         
         void Start()
         {
@@ -46,66 +42,28 @@ namespace Nautica
             enemyHit = agent.GetEnemyHitScore();
         }
 
-        void Awake()
+        void awake()
         {
             DontDestroyOnLoad(transform.gameObject);
         }
 
         void Update()
         {
-            newEnemyHitscore = agent.GetEnemyHitScore();
-            newPlayerhitScore = agent.GetPlayerHitScore();
-
-            UpdateScore();
-            
-            DisplayScore(score);
+            score = agent.GetCumulativeReward();
+            DisplayScore();
         }
 
-        private void UpdateScore()
+        void DisplayScore()
         {
-            if(PlayerWasHit())
-            {
-                SetNewPlayerHitScore();
-            }
-            else if(EnemyWasHit())
-            {
-                SetNewEnemyHitScore();
-            }
-        }
-
-        private bool PlayerWasHit()
-        {
-            return playerHit != newPlayerhitScore;
-        }
-
-        private bool EnemyWasHit()
-        {
-            return enemyHit != newEnemyHitscore;
-        }
-
-        private void SetNewPlayerHitScore()
-        {
-            playerHit = newPlayerhitScore;
-            score += playerHit;
-        }
-
-        private void SetNewEnemyHitScore()
-        {
-            enemyHit = newEnemyHitscore;
-            score += enemyHit;
-        }
-
-        public void ResetScore()
-        {
-            playerHit = 0f;
-            enemyHit = 0f;
-            DisplayScore(0f);
-        }
-
-        void DisplayScore(float scoreToDisplay)
-        {
-            scoreText.text = (" " + scoreToDisplay); 
+            SetScoreColor();
+            scoreText.text = (" " + score.ToString("0.000")); 
         } 
+
+        private void SetScoreColor()
+        {
+            if (score < 0) scoreText.color = Color.red;
+            if (score > 0) scoreText.color = Color.green;
+        }
     }
 }
  

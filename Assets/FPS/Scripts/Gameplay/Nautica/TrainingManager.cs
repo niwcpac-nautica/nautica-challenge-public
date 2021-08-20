@@ -95,11 +95,6 @@ namespace Nautica {
 			return agent;
 		}
 
-		public void ResetScoreDisplay()
-        {
-			scoreManager.ResetScore();
-        }
-
 		private List<TrainingLevelManager> GetLevelManagers(int level)
 		{
 			List<TrainingLevelManager> result = levels.Where(l => l != null)
