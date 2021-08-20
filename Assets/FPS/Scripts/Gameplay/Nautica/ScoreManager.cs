@@ -23,6 +23,7 @@ namespace Nautica
         public TrainingManager trainingManager;
         private AbstractNauticaAgent agent;
         private float score;
+        private float lastEnemyHitScore;
         
         void Start()
         {
@@ -38,21 +39,25 @@ namespace Nautica
 
         void Update()
         {
-            score = agent.GetCumulativeReward();
+            float newScore = agent.GetEnemyHitScore();
+            if (lastEnemyHitScore != newScore)
+            {
+                lastEnemyHitScore = newScore;
+                score += newScore;
+            }
             DisplayScore();
+        }
+
+        public void ResetScore()
+        {
+            score = 0f;
+            agent.SetEnemyHitScore(0f);
         }
 
         void DisplayScore()
         {
-            SetScoreColor();
             scoreText.text = (" " + score.ToString("0.000")); 
         } 
-
-        private void SetScoreColor()
-        {
-            if (score < 0) scoreText.color = Color.red;
-            if (score > 0) scoreText.color = Color.green;
-        }
     }
 }
  

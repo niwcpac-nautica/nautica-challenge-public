@@ -58,6 +58,7 @@ namespace Nautica {
 
         private PlayerCharacterController characterController;
         private PlayerInputHandler inputHandler;
+        private float enemyHit;
 
 		// adding buffer sensors to base class, since all agents would presumably need it
 		// if not used, they'd just be empty and shouldn't affect anything
@@ -245,5 +246,15 @@ namespace Nautica {
 		{
 			return "Cumulative Reward Total: " + GetCumulativeReward().ToString();
 		}
+
+        public float GetEnemyHitScore()
+        {
+            return enemyHit;
+        }
+
+        public void SetEnemyHitScore(float score)
+        {
+            enemyHit = score; 
+        }
     }
 }
