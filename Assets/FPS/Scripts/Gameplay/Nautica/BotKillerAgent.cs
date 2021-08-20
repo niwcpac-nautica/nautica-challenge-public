@@ -106,7 +106,6 @@ namespace Nautica {
 			if (agentHealth == trackedHealth) return; 
 
 			float reward = agentHealth - trackedHealth;
-			SetPlayerHitScore(reward);
 			trackedHealth = agentHealth;
 			RewardAgent(reward, "Agent Health");
 		}
@@ -189,7 +188,6 @@ namespace Nautica {
 			if (enemyHealth >= trackedEnemyHealth[enemyIndex]) return; 
 			
 			float reward = (trackedEnemyHealth[enemyIndex] - enemyHealth);
-			SetEnemyHitScore(reward);
 			trackedEnemyHealth[enemyIndex] = enemyHealth;
 			RewardAgent(reward, "HIT ENEMY");
 		}

@@ -48,7 +48,7 @@ namespace Nautica {
 		{
 			if (Academy.Instance.IsCommunicatorOn)
 			{
-				humanControl = false;  // when in training mode, force agent control
+				humanControl = false;  
 				inTrainingMode = true;
 			}
 
@@ -167,15 +167,12 @@ namespace Nautica {
 
 		private void SwapToNewAnchor(TrainingLevelManager oldManager, TrainingLevelManager newManager)
         {
-			// set agent anchor in new levels to point to agent
 			var newAnchor = oldManager.agentAnchor.GetComponent<AgentResetAnchor>();
 			var oldAnchor = newManager.agentAnchor.GetComponent<AgentResetAnchor>();
 			if (newAnchor && oldAnchor)
 			{
 				newAnchor.entity = oldAnchor.entity;
 				oldAnchor.entity = null;
-				// once anchor is set, when the training episode resets,
-				// the new anchor will reset the agent into place
 			}
 		}
 
@@ -183,7 +180,7 @@ namespace Nautica {
 		{
 			if (nextLevel >= lastLevel) return;
 
-			if (inTrainingMode && !inChallengeTrials) //TODO: test w/ Nick's Score-Manager branch to see if inChallengeTrials work
+			if (inTrainingMode && !inChallengeTrials) 
 			{
 				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level", nextLevel);
 			}
