@@ -20,8 +20,8 @@ namespace Nautica {
 
 		public int level = 0;  // set this to level number for tracking by main TrainingManager
 		public GameObject agentAnchor;  // for now assume only single agent
-		public GameObject agentObj { get; private set; }
-		public AbstractNauticaAgent agent { get; private set; }
+		public GameObject agentObj { get;  set; }
+		public AbstractNauticaAgent agent { get;  set; }
 		public List<GameObject> enemies = new List<GameObject>();
 		public List<GameObject> pickups = new List<GameObject>();
 		private const float WinReward = 1.0f;
@@ -34,7 +34,7 @@ namespace Nautica {
 		/// Assumes agent is instantiated somehwere else, and we just set it here
 		/// </summary>
 		/// <param name="newAgent">The agent to use, or null</param>
-		public void SetAgent(GameObject newAgent)
+		public virtual void SetAgent(GameObject newAgent)
 		{
 			CreateNewAgent(newAgent);
 			ResetAgentAnchor();
@@ -100,15 +100,9 @@ namespace Nautica {
 			trainingManager = manager.GetComponent<TrainingManager>();
 		}
 
-		private GameObject FindManager()
+		public virtual GameObject FindManager()
 		{
 			GameObject manager = GameObject.Find("TrainingManager");
-			if (manager != null)
-			{
-				return manager;
-			}
-
-			manager = GameObject.Find("ChallengeManager");
 			if (manager != null)
 			{
 				return manager;
@@ -189,7 +183,7 @@ namespace Nautica {
 			trainingManager.SetUpNextLevel();
 		}
 
-		public void Reset()
+		public virtual void Reset()
 		{
 			CleanupLevel();
 			agent?.EndEpisode();

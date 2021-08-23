@@ -9,27 +9,19 @@ using Unity.FPS.Gameplay;
 
 namespace Nautica
 {
-    public class ChallengeLevelManager : MonoBehaviour
+    public class ChallengeLevelManager : TrainingLevelManager
     {
-		public Action OnEpisodeReset;
-
-		public int level = 0;  // set this to level number for tracking by main TrainingManager
-		public GameObject agentAnchor;  // for now assume only single agent
-		public GameObject agentObj { get; private set; }
-		public AbstractNauticaAgent agent { get; private set; }
-		public List<GameObject> enemies = new List<GameObject>();
-		public List<GameObject> pickups = new List<GameObject>();
 		private const float WinReward = 1.0f;
 		private const float LoseReward = -1.0f;
 		private const string LOGTAG = nameof(TrainingLevelManager);
-		private ChallengeManager trainingManager;
+		private ChallengeManager challengeManager;
 
 		/// <summary>
 		/// Setup the agent for this training level.
 		/// Assumes agent is instantiated somehwere else, and we just set it here
 		/// </summary>
 		/// <param name="newAgent">The agent to use, or null</param>
-		public void SetAgent(GameObject newAgent)
+		public override void SetAgent(GameObject newAgent)
 		{
 			CreateNewAgent(newAgent);
 			ResetAgentAnchor();
@@ -92,29 +84,18 @@ namespace Nautica
 			GameObject manager = FindManager();
 			if (manager == null) return;
 
-			trainingManager = manager.GetComponent<ChallengeManager>();
+			challengeManager = manager.GetComponent<ChallengeManager>();
 		}
 
-		private GameObject FindManager()
+		public override GameObject FindManager()
 		{
-			GameObject manager = GameObject.Find("TrainingManager");
-			if (manager != null)
-			{
-				return manager;
-			}
-
-			manager = GameObject.Find("ChallengeManager");
+			GameObject manager = GameObject.Find("ChallengeManager");
 			if (manager != null)
 			{
 				return manager;
 			}
 
 			return null;
-		}
-
-		public AbstractNauticaAgent GetAgent()
-		{
-			return agent;
 		}
 
 		void FixedUpdate()
@@ -140,6 +121,7 @@ namespace Nautica
 			if (AgentIsDead())
 			{
 				RewardAgent(LoseReward, "Agent loses, cumulative reward = ");
+				challengeManager.ResetScoreDisplay();
 				return;
 			}
 
@@ -169,11 +151,6 @@ namespace Nautica
 			Reset();
 		}
 
-		public bool AllEnemiesAreDead()
-		{
-			return enemies.All(e => e != null && e.GetComponent<Health>().CurrentHealth <= 0);
-		}
-
 		private bool AgentReachedMaxSteps()
 		{
 			return agent.StepCount >= agent.MaxStep - 1;
@@ -181,13 +158,12 @@ namespace Nautica
 
 		private void MoveToNextLevel()
 		{
-			trainingManager.SetUpNextLevel();
+			challengeManager.SetUpNextLevel();
 		}
 
-		public void Reset()
+		public override void Reset()
 		{
 			CleanupLevel();
-			trainingManager.ResetScoreDisplay();
 			agent?.EndEpisode();
 			OnEpisodeReset?.Invoke();
 		}

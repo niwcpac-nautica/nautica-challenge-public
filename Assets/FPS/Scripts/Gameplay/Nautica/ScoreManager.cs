@@ -20,16 +20,17 @@ namespace Nautica
     {
         public Text scoreText;
 
-        public TrainingManager trainingManager;
+        private ChallengeManager trainingManager;
         private AbstractNauticaAgent agent;
         private float score;
         private float lastEnemyHitScore;
         
         void Start()
         {
-            if (!trainingManager) trainingManager = FindObjectOfType<TrainingManager>();
+            if (!trainingManager) trainingManager = FindObjectOfType<ChallengeManager>();
 
             agent = trainingManager.GetAgent();
+            score = 0;
         }
 
         void awake()

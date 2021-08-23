@@ -23,18 +23,17 @@ namespace Nautica {
     /// </summary>
     public class TrainingManager : MonoBehaviour
     {
-		[SerializeField] private int currentLevel = 0;  // the level we're currently training agents in
+		[SerializeField] public int currentLevel = 0;  // the level we're currently training agents in
 		public int nextLevel = 0;  // if this doesn't match currentLevel, it means we're going to reset to the new level
 		public GameObject agentPrefab;
 		public List<GameObject> levels = new List<GameObject>();
 		private List<TrainingLevelManager> trainingLevelManagers = new List<TrainingLevelManager>();
 		public bool humanControl = false;
-		private bool inTrainingMode = false; 
+		public bool inTrainingMode = false; 
         public bool debugOutput = false;
         private const string LOGTAG = nameof(TrainingManager);
 		public int lastLevel = 3;
-		private bool inChallengeTrials = false;
-		private TrainingLevelManager currentLevelManager;
+		public TrainingLevelManager currentLevelManager;
 
 		void Start()
         {
@@ -49,11 +48,6 @@ namespace Nautica {
 				humanControl = false;  
 				inTrainingMode = true;
 			}
-
-			if(this.transform.parent.name == "ChallengeManager")
-            {
-				inChallengeTrials = true;
-            }
 		}
 
 		private void SetupLevels()
@@ -174,11 +168,11 @@ namespace Nautica {
 			}
 		}
 
-		public void SetUpNextLevel()
+		public virtual void SetUpNextLevel()
 		{
 			if (nextLevel >= lastLevel) return;
 
-			if (inTrainingMode && !inChallengeTrials) 
+			if (inTrainingMode) 
 			{
 				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level", nextLevel);
 			}
