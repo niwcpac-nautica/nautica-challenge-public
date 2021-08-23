@@ -8,56 +8,47 @@ using Unity.FPS.Gameplay;
 using Unity.FPS.AI;
 using Unity.MLAgents;
 
-
-namespace Nautica {
-    /// <summary>
-    /// Manager for overall agent training.
-	/// Handles multiple levels prefabs, with agents running in each.
-	/// These levels may be different difficulty (use different level prefabs),
-	/// and will teleport the agent to different levels based on what its
-	/// currentLevel is set to.
-	/// Intent is for currentLevel to be modified by curriculum learning eventually.
-	/// TrainingManager lets TrainingLevelManagers and ResetAnchors handle the
-	/// details of scoring and resetting the levels.
-	/// It does enable/disable levels and teleport agents into the correct levels as needed.
-    /// </summary>
-    public class TrainingManager : MonoBehaviour
-    {
+namespace Nautica
+{
+	public class ChallengeManager : MonoBehaviour
+	{
 		[SerializeField] private int currentLevel = 0;  // the level we're currently training agents in
 		public int nextLevel = 0;  // if this doesn't match currentLevel, it means we're going to reset to the new level
 		public GameObject agentPrefab;
 		public List<GameObject> levels = new List<GameObject>();
 		private List<TrainingLevelManager> trainingLevelManagers = new List<TrainingLevelManager>();
 		public bool humanControl = false;
-		private bool inTrainingMode = false; 
-        public bool debugOutput = false;
-        private const string LOGTAG = nameof(TrainingManager);
+		private bool inTrainingMode = false;
+		public bool debugOutput = false;
+		private const string LOGTAG = nameof(TrainingManager);
 		public int lastLevel = 3;
 		private bool inChallengeTrials = false;
 		private TrainingLevelManager currentLevelManager;
+		private ScoreManager scoreManager;
 
 		void Start()
-        {
+		{
 			SetupEnvironmentMode();
 			SetupLevels();
+			scoreManager = FindObjectOfType<ScoreManager>();
 		}
 
 		private void SetupEnvironmentMode()
 		{
 			if (Academy.Instance.IsCommunicatorOn)
 			{
-				humanControl = false;  
+				humanControl = false;
 				inTrainingMode = true;
 			}
 
-			if(this.transform.parent.name == "ChallengeManager")
-            {
+			if (this.transform.parent.name == "ChallengeManager")
+			{
 				inChallengeTrials = true;
-            }
+			}
 		}
 
 		private void SetupLevels()
-        {
+		{
 			foreach (var level in levels)
 			{
 				ActivateCurrentLevelOnly(level);
@@ -65,7 +56,7 @@ namespace Nautica {
 		}
 
 		private void ActivateCurrentLevelOnly(GameObject level)
-        {
+		{
 			var manager = level.GetComponent<TrainingLevelManager>();
 			if (manager == null) return;
 
@@ -79,7 +70,7 @@ namespace Nautica {
 		}
 
 		private void InstantiateAgentUsingAgentAnchor(GameObject level, TrainingLevelManager manager)
-        {
+		{
 			GameObject agentAnchor = manager.agentAnchor;
 			GameObject newAgent = Instantiate(agentPrefab, agentAnchor.transform.position, agentAnchor.transform.rotation);
 			currentLevelManager = manager;
@@ -164,7 +155,7 @@ namespace Nautica {
 		}
 
 		private void SwapToNewAnchor(TrainingLevelManager oldManager, TrainingLevelManager newManager)
-        {
+		{
 			var newAnchor = oldManager.agentAnchor.GetComponent<AgentResetAnchor>();
 			var oldAnchor = newManager.agentAnchor.GetComponent<AgentResetAnchor>();
 			if (newAnchor && oldAnchor)
@@ -178,7 +169,7 @@ namespace Nautica {
 		{
 			if (nextLevel >= lastLevel) return;
 
-			if (inTrainingMode && !inChallengeTrials) 
+			if (inTrainingMode && !inChallengeTrials)
 			{
 				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level", nextLevel);
 			}
@@ -189,5 +180,11 @@ namespace Nautica {
 
 			SwitchLevel();
 		}
-    }
+
+		public void ResetScoreDisplay()
+		{
+			scoreManager.ResetScore();
+		}
+	}
+
 }
