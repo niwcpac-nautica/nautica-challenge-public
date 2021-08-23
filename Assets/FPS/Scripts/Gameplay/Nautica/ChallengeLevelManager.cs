@@ -131,11 +131,6 @@ namespace Nautica
 				MoveToNextLevel();
 				return;
 			}
-
-			if (AgentReachedMaxSteps())
-			{
-				RewardAgent(0.0f, "Agent reached MAX_STEPS, cumulative reward = ");
-			}
 		}
 
 		private bool AgentIsDead()

@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 108635392}
-  LoseSceneName: Lose
+  LoseSceneName: GameOver
 --- !u!114 &108635391
 MonoBehaviour:
   m_ObjectHideFlags: 0

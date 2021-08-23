@@ -30,7 +30,7 @@ namespace Nautica {
 		private const string LOGTAG = nameof(BotKillerAgent);
 
 		private const float minDistanceToEnemy = 30f;
-		public bool debug = false; 
+		public bool debug = false;
 
 		protected override void Awake()
 		{
@@ -189,6 +189,7 @@ namespace Nautica {
 			
 			float reward = (trackedEnemyHealth[enemyIndex] - enemyHealth);
 			SetEnemyHitScore(reward);
+			SetEnemyWasHitState(true);
 			trackedEnemyHealth[enemyIndex] = enemyHealth;
 			RewardAgent(reward, "HIT ENEMY");
 		}

@@ -18,8 +18,8 @@ EditorBuildSettings:
     path: Assets/FPS/Scenes/MainScene.unity
     guid: d794a2ef8ba31d847ad3c19d03e2ddb9
   - enabled: 0
-    path: Assets/Scenes/training-test.unity
-    guid: 8d2b7bf1eb173e54dbb34c0ca88619e4
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
     path: Assets/Scenes/The Challenge/Level 0.unity
     guid: 16cb5081edc767e49a43652445420541
@@ -41,4 +41,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Training for the Challenge/Training Main Scene.unity
     guid: 65a0ef57251224842af3f4e44927e1e9
+  - enabled: 1
+    path: Assets/Scenes/TheChallenge/TheChallenge Scene.unity
+    guid: b18df0d703a26314f9b9384768e6f00a
+  - enabled: 1
+    path: Assets/Scenes/TheChallenge/GameOver.unity
+    guid: 90da538b8ac56d2478b9db952b54d01c
   m_configObjects: {}

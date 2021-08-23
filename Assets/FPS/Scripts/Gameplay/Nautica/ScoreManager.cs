@@ -40,11 +40,9 @@ namespace Nautica
 
         void Update()
         {
-            float newScore = agent.GetEnemyHitScore();
-            if (lastEnemyHitScore != newScore)
+            if(agent.EnemyWasHit())
             {
-                lastEnemyHitScore = newScore;
-                score += newScore;
+                score += agent.GetEnemyHitScore();
             }
             DisplayScore();
         }
