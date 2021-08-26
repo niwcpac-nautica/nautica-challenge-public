@@ -249,12 +249,12 @@ namespace Nautica {
 
         public float GetEnemyHitScore()
         {
-            return enemyHit;
+            return enemiesDamage;
         }
 
         public void SetEnemyHitScore(float score)
         {
-            enemyHit = score; 
+            enemiesDamage = score; 
         }
     }
 }
