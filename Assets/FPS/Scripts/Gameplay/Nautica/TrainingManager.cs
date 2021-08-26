@@ -71,6 +71,8 @@ namespace Nautica {
 			var manager = level.GetComponent<TrainingLevelManager>();
 			if (manager == null) return;
 
+			manager.SetManager(this);
+
 			if (manager.level != currentLevel)
 			{
 				manager.gameObject.SetActive(false);
