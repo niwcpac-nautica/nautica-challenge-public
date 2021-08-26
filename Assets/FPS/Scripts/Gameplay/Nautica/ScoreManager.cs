@@ -16,6 +16,7 @@ namespace Nautica
     /// This class is responsible for having a visual score for the NAUTICA Challenge. It takes the rewards from the BotKillerAgent class that have to do with hitting an enemy or getting hit.
     /// ScoreManager will be a way for us to score how well an agent does when put to the test in the challenge.
     /// </summary>
+    [RequireComponent(typeof(TrainingManager))]
     public class ScoreManager : MonoBehaviour
     {
         public Text scoreText;
@@ -27,7 +28,7 @@ namespace Nautica
         
         void Start()
         {
-            if (!trainingManager) trainingManager = FindObjectOfType<TrainingManager>();
+            trainingManager = GetComponent<TrainingManager>();
 
             agent = trainingManager.GetAgent();
         }
