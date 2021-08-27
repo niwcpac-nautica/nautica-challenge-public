@@ -10,8 +10,8 @@ using Unity.MLAgents;
 
 
 namespace Nautica {
-    /// <summary>
-    /// Manager for overall agent training.
+	/// <summary>
+	/// Manager for overall agent training.
 	/// Handles multiple levels prefabs, with agents running in each.
 	/// These levels may be different difficulty (use different level prefabs),
 	/// and will teleport the agent to different levels based on what its
@@ -20,8 +20,9 @@ namespace Nautica {
 	/// TrainingManager lets TrainingLevelManagers and ResetAnchors handle the
 	/// details of scoring and resetting the levels.
 	/// It does enable/disable levels and teleport agents into the correct levels as needed.
-    /// </summary>
-    public class TrainingManager : MonoBehaviour
+	/// </summary>
+	[RequireComponent(typeof(ScoreManager))]
+	public class TrainingManager : MonoBehaviour
     {
 		[SerializeField] private int currentLevel = 0;  // the level we're currently training agents in
 		public int nextLevel = 0;  // if this doesn't match currentLevel, it means we're going to reset to the new level
@@ -35,13 +36,13 @@ namespace Nautica {
 		public int lastLevel = 3;
 		private bool inChallengeTrials = false;
 		private TrainingLevelManager currentLevelManager;
-		private ScoreManager scoreManager;
+		public ScoreManager scoreManager;
 
 		void Start()
         {
 			SetupEnvironmentMode();
 			SetupLevels();
-			scoreManager = FindObjectOfType<ScoreManager>();
+			scoreManager = GetComponent<ScoreManager>();
 		}
 
 		private void SetupEnvironmentMode()
