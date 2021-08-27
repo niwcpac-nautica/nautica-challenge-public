@@ -10,8 +10,8 @@ using Unity.MLAgents;
 
 
 namespace Nautica {
-    /// <summary>
-    /// Manager for overall agent training.
+	/// <summary>
+	/// Manager for overall agent training.
 	/// Handles multiple levels prefabs, with agents running in each.
 	/// These levels may be different difficulty (use different level prefabs),
 	/// and will teleport the agent to different levels based on what its
@@ -20,8 +20,9 @@ namespace Nautica {
 	/// TrainingManager lets TrainingLevelManagers and ResetAnchors handle the
 	/// details of scoring and resetting the levels.
 	/// It does enable/disable levels and teleport agents into the correct levels as needed.
-    /// </summary>
-    public class TrainingManager : MonoBehaviour
+	/// </summary>
+	[RequireComponent(typeof(ScoreManager))]
+	public class TrainingManager : MonoBehaviour
     {
 		[SerializeField] private int currentLevel = 0;  // the level we're currently training agents in
 		public int nextLevel = 0;  // if this doesn't match currentLevel, it means we're going to reset to the new level
@@ -34,18 +35,21 @@ namespace Nautica {
         private const string LOGTAG = nameof(TrainingManager);
 		public int lastLevel = 3;
 		private bool inChallengeTrials = false;
+		private TrainingLevelManager currentLevelManager;
+		public ScoreManager scoreManager;
 
-        void Start()
+		void Start()
         {
 			SetupEnvironmentMode();
 			SetupLevels();
+			scoreManager = GetComponent<ScoreManager>();
 		}
 
 		private void SetupEnvironmentMode()
 		{
 			if (Academy.Instance.IsCommunicatorOn)
 			{
-				humanControl = false;  // when in training mode, force agent control
+				humanControl = false;  
 				inTrainingMode = true;
 			}
 
@@ -68,6 +72,8 @@ namespace Nautica {
 			var manager = level.GetComponent<TrainingLevelManager>();
 			if (manager == null) return;
 
+			manager.SetManager(this);
+
 			if (manager.level != currentLevel)
 			{
 				manager.gameObject.SetActive(false);
@@ -81,8 +87,15 @@ namespace Nautica {
         {
 			GameObject agentAnchor = manager.agentAnchor;
 			GameObject newAgent = Instantiate(agentPrefab, agentAnchor.transform.position, agentAnchor.transform.rotation);
+			currentLevelManager = manager;
 			newAgent.transform.parent = level.transform;
 			manager.SetAgent(newAgent);
+		}
+
+		public AbstractNauticaAgent GetAgent()
+		{
+			AbstractNauticaAgent agent = currentLevelManager.GetAgent();
+			return agent;
 		}
 
 		private List<TrainingLevelManager> GetLevelManagers(int level)
@@ -157,15 +170,12 @@ namespace Nautica {
 
 		private void SwapToNewAnchor(TrainingLevelManager oldManager, TrainingLevelManager newManager)
         {
-			// set agent anchor in new levels to point to agent
 			var newAnchor = oldManager.agentAnchor.GetComponent<AgentResetAnchor>();
 			var oldAnchor = newManager.agentAnchor.GetComponent<AgentResetAnchor>();
 			if (newAnchor && oldAnchor)
 			{
 				newAnchor.entity = oldAnchor.entity;
 				oldAnchor.entity = null;
-				// once anchor is set, when the training episode resets,
-				// the new anchor will reset the agent into place
 			}
 		}
 
@@ -173,7 +183,7 @@ namespace Nautica {
 		{
 			if (nextLevel >= lastLevel) return;
 
-			if (inTrainingMode && !inChallengeTrials) //TODO: test w/ Nick's Score-Manager branch to see if inChallengeTrials work
+			if (inTrainingMode && !inChallengeTrials) 
 			{
 				nextLevel = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level", nextLevel);
 			}
@@ -184,5 +194,10 @@ namespace Nautica {
 
 			SwitchLevel();
 		}
-	}
+
+        public void ResetScoreDisplay()
+        {
+			scoreManager.ResetScore();
+        }
+    }
 }

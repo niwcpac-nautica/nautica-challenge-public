@@ -948,6 +948,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -30
       objectReference: {fileID: 0}
+    - target: {fileID: 2213613978377937955, guid: c996b53e9f849234393d1e90f68d1679,
+        type: 3}
+      propertyPath: scoreText
+      value: 
+      objectReference: {fileID: 6936133273478162228}
     - target: {fileID: 3235725120890558624, guid: c996b53e9f849234393d1e90f68d1679,
         type: 3}
       propertyPath: m_Enabled
@@ -1045,6 +1050,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2448861933364831570}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6936133273478162228 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4737226618131513958, guid: c996b53e9f849234393d1e90f68d1679,
+    type: 3}
+  m_PrefabInstance: {fileID: 2448861933364831570}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3728654914279013843 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1315839542190839937, guid: c996b53e9f849234393d1e90f68d1679,

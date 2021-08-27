@@ -58,6 +58,7 @@ namespace Nautica {
 
         private PlayerCharacterController characterController;
         private PlayerInputHandler inputHandler;
+        private float enemiesDamage;
 
 		// adding buffer sensors to base class, since all agents would presumably need it
 		// if not used, they'd just be empty and shouldn't affect anything
@@ -68,7 +69,6 @@ namespace Nautica {
 		private const string pickupBufferSensorName = "PickupBufferSensor";
 
         private const string LOGTAG = nameof(AbstractNauticaAgent);
-
 
         protected virtual void Awake()
         {
@@ -246,6 +246,15 @@ namespace Nautica {
 		{
 			return "Cumulative Reward Total: " + GetCumulativeReward().ToString();
 		}
-    }
 
+        public float GetEnemyHitScore()
+        {
+            return enemiesDamage;
+        }
+
+        public void SetEnemyHitScore(float score)
+        {
+            enemiesDamage = score; 
+        }
+    }
 }

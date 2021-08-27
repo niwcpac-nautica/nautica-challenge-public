@@ -110,7 +110,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7c32317e06a87af4c9ae5a20d8d2fc91,
+      objectReference: {fileID: 5022602860645237092, guid: 56e4011ffb48cb0499738bca23663da9,
         type: 3}
     - target: {fileID: 5584547659887620153, guid: 0c23df8ee07a40d478edf81afff0027e,
         type: 3}
@@ -135,6 +135,16 @@ PrefabInstance:
     - target: {fileID: 8360542167588937302, guid: 0c23df8ee07a40d478edf81afff0027e,
         type: 3}
       propertyPath: debug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8360542167588937302, guid: 0c23df8ee07a40d478edf81afff0027e,
+        type: 3}
+      propertyPath: enemyHit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8360542167588937302, guid: 0c23df8ee07a40d478edf81afff0027e,
+        type: 3}
+      propertyPath: playerHit
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:

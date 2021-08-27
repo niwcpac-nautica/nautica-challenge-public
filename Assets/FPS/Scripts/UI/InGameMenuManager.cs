@@ -3,6 +3,7 @@ using Unity.FPS.Gameplay;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Nautica;
 
 namespace Unity.FPS.UI
 {
@@ -28,6 +29,7 @@ namespace Unity.FPS.UI
 
         [Tooltip("GameObject for the controls")]
         public GameObject ControlImage;
+
 
         PlayerInputHandler m_PlayerInputsHandler;
         Health m_PlayerHealth;

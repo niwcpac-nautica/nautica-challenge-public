@@ -2,7 +2,7 @@
 using Unity.FPS.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Nautica;
 namespace Unity.FPS.UI
 {
     public class JetpackCounter : MonoBehaviour

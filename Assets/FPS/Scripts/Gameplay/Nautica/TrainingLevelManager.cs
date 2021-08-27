@@ -28,7 +28,7 @@ namespace Nautica {
 		private const float WinReward = 1.0f;
 		private const float LoseReward = -1.0f;
 		private const string LOGTAG = nameof(TrainingLevelManager);
-
+		private TrainingManager trainingManager;
 
 		/// <summary>
 		/// Setup the agent for this training level.
@@ -90,6 +90,16 @@ namespace Nautica {
 			{
 				actorsManager.Actors.Add(agentActor);
 			}
+		}
+
+		public void SetManager(TrainingManager manager)
+        {
+			trainingManager = manager;
+        }
+
+		public AbstractNauticaAgent GetAgent()
+		{
+			return agent;
 		}
 
 		void FixedUpdate()
@@ -156,33 +166,13 @@ namespace Nautica {
 
 		private void MoveToNextLevel()
 		{
-			GameObject manager = FindManager();
-			if (manager == null) return;
-
-			var trainingManager = manager.GetComponent<TrainingManager>();
 			trainingManager.SetUpNextLevel();
 		}
-
-		private GameObject FindManager()
-        {
-			GameObject manager = GameObject.Find("TrainingManager");
-			if (manager != null)
-			{
-				return manager;
-			}
-
-			manager = GameObject.Find("ChallengeManager");
-			if (manager != null)
-			{
-				return manager;
-			}
-
-			return null;
-        }
 
 		public void Reset()
 		{
 			CleanupLevel();
+			trainingManager.ResetScoreDisplay();
 			agent?.EndEpisode();
 			OnEpisodeReset?.Invoke();
 		}

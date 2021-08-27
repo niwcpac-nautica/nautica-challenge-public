@@ -8,20 +8,19 @@ using Unity.FPS.Game;
 using Unity.FPS.Gameplay;
 
 
-namespace Nautica
-{
-	/// <summary>
-	/// this is a test agent. we will kill bots in the tutorial game, to test out our states/actions/rewards, and run training tests
-	/// </summary>
-	public class BotKillerAgent : AbstractNauticaAgent
-	{
-		[SerializeField] private List<GameObject> enemies = new List<GameObject>();
-		[SerializeField] private List<GameObject> pickups = new List<GameObject>();
-		[SerializeField] private GameObject lvl;
-		[SerializeField] private GameObject player;
+namespace Nautica {
+    /// <summary>
+    /// this is a test agent. we will kill bots in the tutorial game, to test out our states/actions/rewards, and run training tests
+    /// </summary>
+    public class BotKillerAgent : AbstractNauticaAgent
+    {
+        [SerializeField] private List<GameObject> enemies = new List<GameObject>();
+        [SerializeField] private List<GameObject> pickups = new List<GameObject>();
+        [SerializeField] private GameObject lvl;
+        [SerializeField] private GameObject player;
 
-		[SerializeField] private float trackedHealth;
-		[SerializeField] private List<float> trackedEnemyHealth = new List<float>();
+        [SerializeField] public float trackedHealth;
+        [SerializeField] private List<float> trackedEnemyHealth = new List<float>();
 		private PlayerWeaponsManager playerWeaponsManager;
 		private WeaponController weaponController;
 		private List<string> debugEnemyBufferSensorObs = new List<string>();  // this is just for debug display output during testing
@@ -189,6 +188,7 @@ namespace Nautica
 			if (enemyHealth >= trackedEnemyHealth[enemyIndex]) return; 
 			
 			float reward = (trackedEnemyHealth[enemyIndex] - enemyHealth);
+			SetEnemyHitScore(reward);
 			trackedEnemyHealth[enemyIndex] = enemyHealth;
 			RewardAgent(reward, "HIT ENEMY");
 		}

@@ -2,6 +2,7 @@
 using Unity.FPS.Game;
 using Unity.FPS.Gameplay;
 using UnityEngine;
+using Nautica;
 
 namespace Unity.FPS.UI
 {
