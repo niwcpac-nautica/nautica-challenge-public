@@ -1,3 +1,8 @@
+## Final challenge 
+- 26 Aug 2021 Initial release
+  - Automatic agent advancement implemented for agent training and for the challenge.
+  - Curriculum learning instructions available with example YAML file.
+  - Fixed unassigned references exception bug.
 ## Beta
 - 12 Aug 2021 Patch release
   - Restructured/refactored/cleaned-up Botkiller agent script for ease of code review, training, etc.
