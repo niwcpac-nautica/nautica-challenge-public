@@ -9,7 +9,7 @@ public class Timer : MonoBehaviour
     /// <summary>
     /// You need to change timeValue here! It cant be done in the scene because it has to be static accross all scenes.
     /// </summary>
-    static public float timeValue = 5;//900;
+    static public float timeValue = 10;//900;
     // This is where you put in the text object in the scene so it shows up in game.
     public Text timerText;
     [Header("Lose")] [Tooltip("This string has to be the name of the scene you want to load when losing")]
