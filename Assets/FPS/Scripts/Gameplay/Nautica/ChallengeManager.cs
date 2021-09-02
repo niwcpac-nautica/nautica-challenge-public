@@ -10,7 +10,7 @@ using Unity.MLAgents;
 
 namespace Nautica
 {
-	[RequireComponent(typeof(ScoreManager))]
+	//[RequireComponent(typeof(ScoreManager))]
 	public class ChallengeManager : TrainingManager
 	{
 		private const string LOGTAG = nameof(ChallengeManager);

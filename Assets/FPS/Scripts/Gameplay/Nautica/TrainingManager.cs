@@ -21,7 +21,6 @@ namespace Nautica {
 	/// details of scoring and resetting the levels.
 	/// It does enable/disable levels and teleport agents into the correct levels as needed.
 	/// </summary>
-	[RequireComponent(typeof(ScoreManager))]
 	public class TrainingManager : MonoBehaviour
     {
 		[SerializeField] public int currentLevel = 0;  // the level we're currently training agents in
