@@ -248,6 +248,11 @@ namespace Nautica {
 			return "Cumulative Reward Total: " + GetCumulativeReward().ToString();
 		}
 
+        public void SetEnemyHitScore(float score)
+        {
+            enemiesDamage = score;
+        }
+
         public float GetEnemyHitScore()
         {
             return enemiesDamage;

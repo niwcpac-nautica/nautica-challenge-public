@@ -191,7 +191,7 @@ namespace Nautica {
 		public virtual void Reset()
 		{
 			CleanupLevel();
-			trainingManager.ResetScoreDisplay();
+			//trainingManager.ResetScoreDisplay();
 			agent?.EndEpisode();
 			OnEpisodeReset?.Invoke();
 		}

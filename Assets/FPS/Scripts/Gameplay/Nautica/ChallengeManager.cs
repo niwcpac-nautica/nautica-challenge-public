@@ -10,16 +10,17 @@ using Unity.MLAgents;
 
 namespace Nautica
 {
+	[RequireComponent(typeof(ScoreManager))]
 	public class ChallengeManager : TrainingManager
 	{
 		private const string LOGTAG = nameof(ChallengeManager);
-		private ScoreManager scoreManager;
+		public ScoreManager scoreManager;
 
 		void Start()
 		{
 			SetupEnvironmentMode();
 			SetupLevels();
-			scoreManager = FindObjectOfType<ScoreManager>();
+			scoreManager = GetComponent<ScoreManager>();
 		}
 
 		private void SetupEnvironmentMode()
@@ -43,6 +44,9 @@ namespace Nautica
 		{
 			var manager = level.GetComponent<ChallengeLevelManager>();
 			if (manager == null) return;
+
+			manager.SetManager(this);
+
 			if (manager.level != currentLevel)
 			{
 				manager.gameObject.SetActive(false);

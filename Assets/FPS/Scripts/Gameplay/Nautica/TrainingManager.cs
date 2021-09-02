@@ -35,14 +35,12 @@ namespace Nautica {
         private const string LOGTAG = nameof(TrainingManager);
 		public int lastLevel = 3;
 		private bool inChallengeTrials = false;
-		private TrainingLevelManager currentLevelManager;
-		public ScoreManager scoreManager;
+		public TrainingLevelManager currentLevelManager;
 
 		void Start()
         {
 			SetupEnvironmentMode();
 			SetupLevels();
-			scoreManager = GetComponent<ScoreManager>();
 		}
 
 		private void SetupEnvironmentMode()

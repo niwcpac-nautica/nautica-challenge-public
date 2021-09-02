@@ -296,6 +296,7 @@ MonoBehaviour:
   debugOutput: 0
   lastLevel: 3
   currentLevelManager: {fileID: 0}
+  scoreManager: {fileID: 209145604}
 --- !u!114 &209145604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1738,4 +1739,6 @@ PrefabInstance:
     - {fileID: 346408024904043549, guid: 1f409385cb77e1642b06322a2fb9f71b, type: 3}
     - {fileID: 481756884547474093, guid: 1f409385cb77e1642b06322a2fb9f71b, type: 3}
     - {fileID: 5053595164199898323, guid: 1f409385cb77e1642b06322a2fb9f71b, type: 3}
+    - {fileID: 952670790340962357, guid: 1f409385cb77e1642b06322a2fb9f71b, type: 3}
+    - {fileID: 2859268814966578643, guid: 1f409385cb77e1642b06322a2fb9f71b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1f409385cb77e1642b06322a2fb9f71b, type: 3}
