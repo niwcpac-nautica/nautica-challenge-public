@@ -54,12 +54,6 @@ namespace Nautica
             DisplayScore();
         }
 
-        public void ResetScore()
-        {
-            score = 0f;
-            agent.SetEnemyHitScore(0f);
-        }
-
         void DisplayScore()
         {
             scoreText.text = (" " + score.ToString("0.000")); 

@@ -6,6 +6,7 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.FPS.Game;
 using Unity.FPS.Gameplay;
+using UnityEngine.SceneManagement;
 
 namespace Nautica
 {
@@ -15,6 +16,7 @@ namespace Nautica
 		private const float LoseReward = -1.0f;
 		private const string LOGTAG = nameof(TrainingLevelManager);
 		private ChallengeManager challengeManager;
+		public string LoseSceneName = "GameOver";
 
 		/// <summary>
 		/// Setup the agent for this training level.
@@ -121,13 +123,14 @@ namespace Nautica
 			if (AgentIsDead())
 			{
 				RewardAgent(LoseReward, "Agent loses, cumulative reward = ");
-				challengeManager.ResetScoreDisplay();
+				SceneManager.LoadScene(LoseSceneName);
 				return;
 			}
 
 			if (AllEnemiesAreDead())
 			{
 				RewardAgent(WinReward, "Agent wins, cumulative reward = ");
+				Reset();
 				MoveToNextLevel();
 				return;
 			}
@@ -143,7 +146,6 @@ namespace Nautica
 		{
 			agent.AddReward(reward);
 			Debug.unityLogger.Log(LOGTAG, message + agent.GetCumulativeReward());
-			Reset();
 		}
 
 		private bool AgentReachedMaxSteps()

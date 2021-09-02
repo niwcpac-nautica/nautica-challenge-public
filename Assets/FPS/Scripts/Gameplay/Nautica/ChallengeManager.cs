@@ -154,11 +154,6 @@ namespace Nautica
 
 			SwitchLevel();
 		}
-
-		public void ResetScoreDisplay()
-		{
-			scoreManager.ResetScore();
-		}
 	}
 
 }
