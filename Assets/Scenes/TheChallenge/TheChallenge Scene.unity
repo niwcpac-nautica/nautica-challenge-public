@@ -310,7 +310,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 648c695355ad401448f14ccb8c68b216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  file: {fileID: 4900000, guid: 60dc0a4f76d38144694b5f7d2f5f3e2a, type: 3}
 --- !u!114 &209145604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,6 +452,7 @@ MonoBehaviour:
   pickups:
   - {fileID: 2011217498}
   - {fileID: 1033776103}
+  LoseSceneName: GameOver
 --- !u!1001 &471444814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -568,6 +568,7 @@ MonoBehaviour:
   - {fileID: 209308179}
   - {fileID: 220869565}
   - {fileID: 1969385604}
+  LoseSceneName: GameOver
 --- !u!1 &482133866 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6832699805787286539, guid: 3b811d62fc552a14f9833f5d6fa89e4d,
@@ -919,6 +920,7 @@ MonoBehaviour:
   pickups:
   - {fileID: 482133866}
   - {fileID: 746322798}
+  LoseSceneName: GameOver
 --- !u!1 &1260032149 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8973976939196931864, guid: 942ede97d2971ac47b907e19b1d74741,
@@ -1282,6 +1284,7 @@ MonoBehaviour:
   - {fileID: 2038840143}
   pickups:
   - {fileID: 1942962124}
+  LoseSceneName: GameOver
 --- !u!1001 &7542368949361759167
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1624,6 +1627,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ChallengeManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563213032399217974, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
+      propertyPath: m_TagString
+      value: TrainingManager
       objectReference: {fileID: 0}
     - target: {fileID: 6671787469635375608, guid: 1f409385cb77e1642b06322a2fb9f71b,
         type: 3}
