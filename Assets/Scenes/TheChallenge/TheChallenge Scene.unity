@@ -183,6 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timerText: {fileID: 108635392}
   LoseSceneName: GameOver
+  scoreLog: {fileID: 209145600}
 --- !u!114 &108635391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +298,19 @@ MonoBehaviour:
   lastLevel: 3
   currentLevelManager: {fileID: 0}
   scoreManager: {fileID: 209145604}
+--- !u!114 &209145600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209145597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 648c695355ad401448f14ccb8c68b216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  file: {fileID: 4900000, guid: 60dc0a4f76d38144694b5f7d2f5f3e2a, type: 3}
 --- !u!114 &209145604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,6 +324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 920272291}
+  scoreLog: {fileID: 209145600}
 --- !u!1 &209308179 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6162212168917123219, guid: c7cf6450749521b4abd2098f0510f71a,
