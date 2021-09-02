@@ -111,6 +111,11 @@ namespace Nautica {
 			return null;
 		}
 
+		public void SetManager(TrainingManager manager)
+        {
+			trainingManager = manager;
+        }
+
 		public AbstractNauticaAgent GetAgent()
 		{
 			return agent;
@@ -186,6 +191,7 @@ namespace Nautica {
 		public virtual void Reset()
 		{
 			CleanupLevel();
+			trainingManager.ResetScoreDisplay();
 			agent?.EndEpisode();
 			OnEpisodeReset?.Invoke();
 		}

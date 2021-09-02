@@ -1461,6 +1461,11 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 5053595164199898323, guid: 1f409385cb77e1642b06322a2fb9f71b,
         type: 3}
+      propertyPath: scoreManager
+      value: 
+      objectReference: {fileID: 209145604}
+    - target: {fileID: 5053595164199898323, guid: 1f409385cb77e1642b06322a2fb9f71b,
+        type: 3}
       propertyPath: levels.Array.size
       value: 4
       objectReference: {fileID: 0}
