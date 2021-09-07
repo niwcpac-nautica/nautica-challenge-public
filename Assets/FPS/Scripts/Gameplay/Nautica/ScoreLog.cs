@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
 
-public class ScoreLog : MonoBehaviour
+public static class ScoreLog
 {
-    private string path = "Assets/FPS/Scripts/Gameplay/Nautica/ScoreLog.txt";
+    private static string path = "Assets/FPS/Scripts/Gameplay/Nautica/ScoreLog.txt";
 
-    public string GetScore()
+    public static string GetScore()
     {
         StreamReader reader = new StreamReader(path);
         string contents = reader.ReadToEnd();
@@ -16,7 +14,7 @@ public class ScoreLog : MonoBehaviour
         return contents;
     }
 
-    public void AddNewScore(string newScore)
+    public static void AddNewScore(string newScore)
     {
         StreamWriter writer = new StreamWriter(path, false);
         writer.WriteLine(newScore);
