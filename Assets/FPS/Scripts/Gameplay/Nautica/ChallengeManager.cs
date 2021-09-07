@@ -12,7 +12,6 @@ namespace Nautica
 {
 	public class ChallengeManager : TrainingManager
 	{
-		private const string LOGTAG = nameof(ChallengeManager);
 		public ScoreManager scoreManager;
 
 		void Start()
@@ -27,7 +26,6 @@ namespace Nautica
 			if (nextLevel >= lastLevel) return;
 
 			nextLevel++;
-
 			SwitchLevel();
 		}
 	}

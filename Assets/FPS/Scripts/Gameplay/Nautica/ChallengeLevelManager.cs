@@ -12,10 +12,6 @@ namespace Nautica
 {
     public class ChallengeLevelManager : TrainingLevelManager
     {
-		private const float WinReward = 1.0f;
-		private const float LoseReward = -1.0f;
-		private const string LOGTAG = nameof(TrainingLevelManager);
-		private ChallengeManager challengeManager;
 		public string LoseSceneName = "GameOver";
 
 		public override void CheckForEndOfEpisodeEvent()
