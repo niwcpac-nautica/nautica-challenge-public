@@ -42,7 +42,7 @@ namespace Nautica {
 			SetupLevels();
 		}
 
-		private void SetupEnvironmentMode()
+		public void SetupEnvironmentMode()
 		{
 			if (Academy.Instance.IsCommunicatorOn)
 			{
@@ -51,7 +51,7 @@ namespace Nautica {
 			}
 		}
 
-		private void SetupLevels()
+		public void SetupLevels()
         {
 			foreach (var level in levels)
 			{
@@ -112,7 +112,7 @@ namespace Nautica {
 				.ToList();
 		}
 
-		private void SwitchLevel()
+		public void SwitchLevel()
 		{
 			if (nextLevel == currentLevel) return;
 

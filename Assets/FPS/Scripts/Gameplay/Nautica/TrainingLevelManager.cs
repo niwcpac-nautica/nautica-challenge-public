@@ -39,7 +39,6 @@ namespace Nautica {
 			CreateNewAgent(newAgent);
 			ResetAgentAnchor();
 			SetActorManager();
-			FindTrainingManager();
 		}
 
 		private void CreateNewAgent(GameObject newAgent)
@@ -92,25 +91,6 @@ namespace Nautica {
 			}
 		}
 
-		private void FindTrainingManager()
-        {
-			GameObject manager = FindManager();
-			if (manager == null) return;
-
-			trainingManager = manager.GetComponent<TrainingManager>();
-		}
-
-		public virtual GameObject FindManager()
-		{
-			GameObject manager = GameObject.Find("TrainingManager");
-			if (manager != null)
-			{
-				return manager;
-			}
-
-			return null;
-		}
-
 		public void SetManager(TrainingManager manager)
         {
 			trainingManager = manager;
@@ -139,7 +119,7 @@ namespace Nautica {
 			return !agentObj || !agent;
 		}
 
-		private void CheckForEndOfEpisodeEvent()
+		public virtual void CheckForEndOfEpisodeEvent()
         {
 			if (AgentIsDead())
 			{
@@ -160,13 +140,13 @@ namespace Nautica {
 			}
 		}
 		
-		private bool AgentIsDead()
+		public bool AgentIsDead()
 		{
 			var agentHealth = agentObj.GetComponent<Health>();
 			return agentHealth && agentHealth.CurrentHealth <= 0;
 		}
 
-		private void RewardAgent(float reward, String message)
+		public void RewardAgent(float reward, String message)
         {
 			agent.AddReward(reward);
 			Debug.unityLogger.Log(LOGTAG, message + agent.GetCumulativeReward());
@@ -183,7 +163,7 @@ namespace Nautica {
 			return agent.StepCount >= agent.MaxStep - 1; 
         }
 
-		private void MoveToNextLevel()
+		public void MoveToNextLevel()
 		{
 			trainingManager.SetUpNextLevel();
 		}
@@ -191,7 +171,6 @@ namespace Nautica {
 		public virtual void Reset()
 		{
 			CleanupLevel();
-			//trainingManager.ResetScoreDisplay();
 			agent?.EndEpisode();
 			OnEpisodeReset?.Invoke();
 		}
