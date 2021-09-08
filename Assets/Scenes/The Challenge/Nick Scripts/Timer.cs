@@ -13,8 +13,7 @@ public class Timer : MonoBehaviour
     // This is where you put in the text object in the scene so it shows up in game.
     public Text timerText;
     [Header("Lose")] [Tooltip("This string has to be the name of the scene you want to load when losing")]
-    public string LoseSceneName = "Lose";
-    
+    public string LoseSceneName = "GameOver";
 
     // Update is called once per frame
     void Start()

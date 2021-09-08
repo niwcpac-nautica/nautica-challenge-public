@@ -7,7 +7,6 @@ using Unity.MLAgents;
 using Unity.FPS.Game;
 using Unity.FPS.Gameplay;
 
-
 namespace Nautica {
 	/// <summary>
 	/// Attached to a level prefab, manages training for a single level.
@@ -21,12 +20,12 @@ namespace Nautica {
 
 		public int level = 0;  // set this to level number for tracking by main TrainingManager
 		public GameObject agentAnchor;  // for now assume only single agent
-		public GameObject agentObj { get; private set; }
-		public AbstractNauticaAgent agent { get; private set; }
+		public GameObject agentObj { get; protected set; }
+		public AbstractNauticaAgent agent { get; protected set; }
 		public List<GameObject> enemies = new List<GameObject>();
 		public List<GameObject> pickups = new List<GameObject>();
-		private const float WinReward = 1.0f;
-		private const float LoseReward = -1.0f;
+		public const float WinReward = 1.0f;
+		public const float LoseReward = -1.0f;
 		private const string LOGTAG = nameof(TrainingLevelManager);
 		private TrainingManager trainingManager;
 
@@ -37,6 +36,8 @@ namespace Nautica {
 		/// <param name="newAgent">The agent to use, or null</param>
 		public void SetAgent(GameObject newAgent)
 		{
+			trainingManager = GetComponent<TrainingManager>();
+
 			CreateNewAgent(newAgent);
 			ResetAgentAnchor();
 			SetActorManager();
@@ -120,7 +121,7 @@ namespace Nautica {
 			return !agentObj || !agent;
 		}
 
-		private void CheckForEndOfEpisodeEvent()
+		public virtual void CheckForEndOfEpisodeEvent()
         {
 			if (AgentIsDead())
 			{
@@ -141,13 +142,13 @@ namespace Nautica {
 			}
 		}
 		
-		private bool AgentIsDead()
+		public bool AgentIsDead()
 		{
 			var agentHealth = agentObj.GetComponent<Health>();
 			return agentHealth && agentHealth.CurrentHealth <= 0;
 		}
 
-		private void RewardAgent(float reward, String message)
+		public void RewardAgent(float reward, String message)
         {
 			agent.AddReward(reward);
 			Debug.unityLogger.Log(LOGTAG, message + agent.GetCumulativeReward());
@@ -164,7 +165,7 @@ namespace Nautica {
 			return agent.StepCount >= agent.MaxStep - 1; 
         }
 
-		private void MoveToNextLevel()
+		public void MoveToNextLevel()
 		{
 			trainingManager.SetUpNextLevel();
 		}
@@ -172,7 +173,6 @@ namespace Nautica {
 		public void Reset()
 		{
 			CleanupLevel();
-			trainingManager.ResetScoreDisplay();
 			agent?.EndEpisode();
 			OnEpisodeReset?.Invoke();
 		}

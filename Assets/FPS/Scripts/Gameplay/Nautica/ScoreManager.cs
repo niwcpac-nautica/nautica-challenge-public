@@ -16,21 +16,22 @@ namespace Nautica
     /// This class is responsible for having a visual score for the NAUTICA Challenge. It takes the rewards from the BotKillerAgent class that have to do with hitting an enemy or getting hit.
     /// ScoreManager will be a way for us to score how well an agent does when put to the test in the challenge.
     /// </summary>
-    [RequireComponent(typeof(TrainingManager))]
     public class ScoreManager : MonoBehaviour
     {
         public Text scoreText;
 
-        public TrainingManager trainingManager;
         private AbstractNauticaAgent agent;
         private float score;
         private float lastEnemyHitScore;
-        
+        private ChallengeManager challengeManager;
+
         void Start()
         {
-            trainingManager = GetComponent<TrainingManager>();
+            challengeManager = GetComponent<ChallengeManager>();
 
-            agent = trainingManager.GetAgent();
+            agent = challengeManager.GetAgent();
+            score = 0;
+            SaveScoreToLog();
         }
 
         void awake()
@@ -45,20 +46,20 @@ namespace Nautica
             {
                 lastEnemyHitScore = newScore;
                 score += newScore;
+                SaveScoreToLog();
             }
             DisplayScore();
-        }
-
-        public void ResetScore()
-        {
-            score = 0f;
-            agent.SetEnemyHitScore(0f);
         }
 
         void DisplayScore()
         {
             scoreText.text = (" " + score.ToString("0.000")); 
-        } 
+        }
+
+        private void SaveScoreToLog()
+        {
+            ScoreLog.AddNewScore(score.ToString());
+        }
     }
 }
  

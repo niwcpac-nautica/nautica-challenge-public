@@ -69,6 +69,7 @@ namespace Nautica {
 		private const string pickupBufferSensorName = "PickupBufferSensor";
 
         private const string LOGTAG = nameof(AbstractNauticaAgent);
+		private bool enemyWasHit = false;
 
         protected virtual void Awake()
         {
@@ -247,14 +248,21 @@ namespace Nautica {
 			return "Cumulative Reward Total: " + GetCumulativeReward().ToString();
 		}
 
+        public void SetEnemyHitScore(float score)
+        {
+            enemiesDamage = score;
+        }
+
         public float GetEnemyHitScore()
         {
             return enemiesDamage;
         }
 
-        public void SetEnemyHitScore(float score)
+        public bool EnemyWasHit()
         {
-            enemiesDamage = score; 
+            bool saveHitState = enemyWasHit;
+            enemyWasHit = false;
+            return saveHitState;
         }
     }
 }
