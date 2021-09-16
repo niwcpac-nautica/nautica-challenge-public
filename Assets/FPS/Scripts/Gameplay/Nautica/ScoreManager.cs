@@ -24,12 +24,10 @@ namespace Nautica
         private float score;
         private float lastEnemyHitScore;
         private ChallengeManager challengeManager;
-        public ScoreLog scoreLog;
 
         void Start()
         {
             challengeManager = GetComponent<ChallengeManager>();
-            scoreLog = GetComponent<ScoreLog>();
 
             agent = challengeManager.GetAgent();
             score = 0;
@@ -60,7 +58,7 @@ namespace Nautica
 
         private void SaveScoreToLog()
         {
-            scoreLog.AddNewScore(score.ToString());
+            ScoreLog.AddNewScore(score.ToString());
         }
     }
 }

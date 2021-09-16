@@ -28,7 +28,6 @@ namespace Nautica
 			CreateNewAgent(newAgent);
 			ResetAgentAnchor();
 			SetActorManager();
-			FindTrainingManager();
 		}
 
 		private void CreateNewAgent(GameObject newAgent)
@@ -81,24 +80,10 @@ namespace Nautica
 			}
 		}
 
-		private void FindTrainingManager()
-		{
-			GameObject manager = FindManager();
-			if (manager == null) return;
-
-			challengeManager = manager.GetComponent<ChallengeManager>();
-		}
-
-		public override GameObject FindManager()
-		{
-			GameObject manager = GameObject.Find("ChallengeManager");
-			if (manager != null)
-			{
-				return manager;
-			}
-
-			return null;
-		}
+		public void SetManager(ChallengeManager manager)
+        {
+			challengeManager = manager;
+        }
 
 		void FixedUpdate()
 		{

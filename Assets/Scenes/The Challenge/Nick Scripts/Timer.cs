@@ -14,7 +14,6 @@ public class Timer : MonoBehaviour
     public Text timerText;
     [Header("Lose")] [Tooltip("This string has to be the name of the scene you want to load when losing")]
     public string LoseSceneName = "GameOver";
-    public ScoreLog scoreLog; 
 
     // Update is called once per frame
     void Start()

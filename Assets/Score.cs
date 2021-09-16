@@ -6,13 +6,10 @@ using TMPro;
 public class Score : MonoBehaviour
 {
     public TMP_Text score;
-    public ScoreLog scoreLog;
 
-    // Start is called before the first frame update
     void Start()
     {
         score.GetComponent<TMP_Text>();
-        scoreLog.GetComponent<ScoreLog>();
-        score.text = scoreLog.GetScore();
+        score.text = ScoreLog.GetScore();
     }
 }

@@ -59,6 +59,7 @@ namespace Nautica {
         private PlayerCharacterController characterController;
         private PlayerInputHandler inputHandler;
         private float enemiesDamage;
+        private float agentHealth;
 
 		// adding buffer sensors to base class, since all agents would presumably need it
 		// if not used, they'd just be empty and shouldn't affect anything
@@ -263,6 +264,16 @@ namespace Nautica {
             bool saveHitState = enemyWasHit;
             enemyWasHit = false;
             return saveHitState;
+        }
+
+        public void SetAgentHealthScore(float score)
+        {
+            agentHealth = score;
+        }
+
+        public float GetAgentHealth()
+        {
+            return agentHealth;
         }
     }
 }

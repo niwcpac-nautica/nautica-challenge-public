@@ -106,6 +106,7 @@ namespace Nautica {
 			if (agentHealth == trackedHealth) return; 
 
 			float reward = agentHealth - trackedHealth;
+			SetAgentHealthScore(reward);
 			trackedHealth = agentHealth;
 			RewardAgent(reward, "Agent Health");
 		}
