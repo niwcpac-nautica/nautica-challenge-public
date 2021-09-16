@@ -34,14 +34,14 @@ namespace Nautica {
 		/// Assumes agent is instantiated somehwere else, and we just set it here
 		/// </summary>
 		/// <param name="newAgent">The agent to use, or null</param>
-		public virtual void SetAgent(GameObject newAgent)
+		public void SetAgent(GameObject newAgent)
 		{
 			CreateNewAgent(newAgent);
 			ResetAgentAnchor();
 			SetActorManager();
 		}
 
-		private void CreateNewAgent(GameObject newAgent)
+		protected void CreateNewAgent(GameObject newAgent)
         {
 			agentObj = newAgent;  // regardless of whether this is null, because we may want to unset it
 
@@ -51,7 +51,7 @@ namespace Nautica {
 			}
 		}
 
-		private void ResetAgentAnchor()
+		protected void ResetAgentAnchor()
         {
 			if (agentAnchor == null) return;
 
@@ -62,7 +62,7 @@ namespace Nautica {
 			}
 		}
 
-		private void SetActorManager()
+		protected void SetActorManager()
         {
 			var actorsManager = GetComponent<ActorsManager>();
 
@@ -71,7 +71,7 @@ namespace Nautica {
 			SetAgentAsPlayerInActorsManager(actorsManager);
 		}
 
-		private void SetAgentAsPlayerInActorsManager(ActorsManager actorsManager)
+		protected void SetAgentAsPlayerInActorsManager(ActorsManager actorsManager)
         {
 			actorsManager.SetPlayer(agentObj);
 
@@ -80,7 +80,7 @@ namespace Nautica {
 			AddPlayerActorToListOfActors(actorsManager);
 		}
 
-		private void AddPlayerActorToListOfActors(ActorsManager actorsManager)
+		protected void AddPlayerActorToListOfActors(ActorsManager actorsManager)
         {
 			var agentActor = agentObj.GetComponent<Actor>();
 			if (agentAnchor == null) return;
@@ -109,17 +109,17 @@ namespace Nautica {
 			CheckForEndOfEpisodeEvent();
 		}
 
-		private bool AgentDidNotMove()
+		protected bool AgentDidNotMove()
         {
 			return Academy.Instance.StepCount == 0;
 		}
 
-		private bool AgentDoesNotExistInLevel()
+		protected bool AgentDoesNotExistInLevel()
         {
 			return !agentObj || !agent;
 		}
 
-		private void CheckForEndOfEpisodeEvent()
+		protected virtual void CheckForEndOfEpisodeEvent()
         {
 			if (AgentIsDead())
 			{
@@ -140,13 +140,13 @@ namespace Nautica {
 			}
 		}
 		
-		private bool AgentIsDead()
+		protected bool AgentIsDead()
 		{
 			var agentHealth = agentObj.GetComponent<Health>();
 			return agentHealth && agentHealth.CurrentHealth <= 0;
 		}
 
-		private void RewardAgent(float reward, String message)
+		protected void RewardAgent(float reward, String message)
         {
 			agent.AddReward(reward);
 			Debug.unityLogger.Log(LOGTAG, message + agent.GetCumulativeReward());
@@ -158,25 +158,24 @@ namespace Nautica {
 			return enemies.All(e => e != null && e.GetComponent<Health>().CurrentHealth <= 0);
 		}
 
-		private bool AgentReachedMaxSteps()
+		protected bool AgentReachedMaxSteps()
         {
 			return agent.StepCount >= agent.MaxStep - 1; 
         }
 
-		private void MoveToNextLevel()
+		protected virtual void MoveToNextLevel()
 		{
 			trainingManager.SetUpNextLevel();
 		}
 
-		public virtual void Reset()
+		public void Reset()
 		{
 			CleanupLevel();
-			//trainingManager.ResetScoreDisplay();
 			agent?.EndEpisode();
 			OnEpisodeReset?.Invoke();
 		}
 
-		private void CleanupLevel()
+		protected void CleanupLevel()
 		{
 			// TODO: this will destroy projectiles in other agent's levels
 			// var projectiles = GameObject.FindObjectsOfType<ProjectileStandard>();
