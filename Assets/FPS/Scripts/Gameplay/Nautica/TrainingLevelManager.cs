@@ -20,12 +20,12 @@ namespace Nautica {
 
 		public int level = 0;  // set this to level number for tracking by main TrainingManager
 		public GameObject agentAnchor;  // for now assume only single agent
-		public GameObject agentObj { get;  set; }
-		public AbstractNauticaAgent agent { get;  set; }
+		public GameObject agentObj { get; protected set; }
+		public AbstractNauticaAgent agent { get; protected set; }
 		public List<GameObject> enemies = new List<GameObject>();
 		public List<GameObject> pickups = new List<GameObject>();
-		private const float WinReward = 1.0f;
-		private const float LoseReward = -1.0f;
+		public const float WinReward = 1.0f;
+		public const float LoseReward = -1.0f;
 		private const string LOGTAG = nameof(TrainingLevelManager);
 		private TrainingManager trainingManager;
 
