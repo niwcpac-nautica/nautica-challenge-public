@@ -12,9 +12,26 @@ namespace Nautica
 {
     public class ChallengeLevelManager : TrainingLevelManager
     {
+		private const float WinReward = 1.0f;
+		private const float LoseReward = -1.0f;
+		private const string LOGTAG = nameof(TrainingLevelManager);
+		private ChallengeManager challengeManager;
 		public string LoseSceneName = "GameOver";
 
-		public override void CheckForEndOfEpisodeEvent()
+		public void SetManager(ChallengeManager manager)
+        {
+			challengeManager = manager;
+        }
+
+		void FixedUpdate()
+		{
+			if (AgentDidNotMove()) return;
+			if (AgentDoesNotExistInLevel()) return;
+
+			CheckForEndOfEpisodeEvent();
+		}
+
+		protected override void CheckForEndOfEpisodeEvent()
 		{
 			if (AgentIsDead())
 			{
@@ -30,6 +47,19 @@ namespace Nautica
 				MoveToNextLevel();
 				return;
 			}
+		}
+
+		protected override void MoveToNextLevel()
+		{
+			ResetAgentHealth();
+			challengeManager.SetUpNextLevel();
+		}
+
+		private void ResetAgentHealth()
+        {
+			var agentHealth = agentObj.GetComponent<Health>();
+			agentHealth.Revive();
+			challengeManager.ResetHealthBar();
 		}
 	}
 }

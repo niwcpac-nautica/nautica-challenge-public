@@ -42,7 +42,7 @@ namespace Nautica {
 			SetupLevels();
 		}
 
-		public void SetupEnvironmentMode()
+		protected void SetupEnvironmentMode()
 		{
 			if (Academy.Instance.IsCommunicatorOn)
 			{
@@ -51,7 +51,7 @@ namespace Nautica {
 			}
 		}
 
-		public void SetupLevels()
+		protected virtual void SetupLevels()
         {
 			foreach (var level in levels)
 			{
@@ -59,7 +59,7 @@ namespace Nautica {
 			}
 		}
 
-		private void ActivateCurrentLevelOnly(GameObject level)
+		protected virtual void ActivateCurrentLevelOnly(GameObject level)
         {
 			var manager = level.GetComponent<TrainingLevelManager>();
 			if (manager == null) return;
@@ -75,7 +75,7 @@ namespace Nautica {
 			InstantiateAgentUsingAgentAnchor(level, manager);
 		}
 
-		private void InstantiateAgentUsingAgentAnchor(GameObject level, TrainingLevelManager manager)
+		protected void InstantiateAgentUsingAgentAnchor(GameObject level, TrainingLevelManager manager)
         {
 			GameObject agentAnchor = manager.agentAnchor;
 			GameObject newAgent = Instantiate(agentPrefab, agentAnchor.transform.position, agentAnchor.transform.rotation);
@@ -90,7 +90,7 @@ namespace Nautica {
 			return agent;
 		}
 
-		private List<TrainingLevelManager> GetLevelManagers(int level)
+		protected List<TrainingLevelManager> GetLevelManagers(int level)
 		{
 			List<TrainingLevelManager> result = levels.Where(l => l != null)
 				.Select(l => l.GetComponent<TrainingLevelManager>())
@@ -105,14 +105,14 @@ namespace Nautica {
 			return result;
 		}
 
-		private List<GameObject> GetLevelObjects(int level)
+		protected List<GameObject> GetLevelObjects(int level)
 		{
 			return GetLevelManagers(level)
 				.Select(l => l.gameObject)
 				.ToList();
 		}
 
-		public void SwitchLevel()
+		protected void SwitchLevel()
 		{
 			if (nextLevel == currentLevel) return;
 
@@ -160,7 +160,7 @@ namespace Nautica {
 			// agent end episode should trigger agents to be reset into new anchors
 		}
 
-		private void SwapToNewAnchor(TrainingLevelManager oldManager, TrainingLevelManager newManager)
+		protected void SwapToNewAnchor(TrainingLevelManager oldManager, TrainingLevelManager newManager)
         {
 			var newAnchor = oldManager.agentAnchor.GetComponent<AgentResetAnchor>();
 			var oldAnchor = newManager.agentAnchor.GetComponent<AgentResetAnchor>();

@@ -58,7 +58,7 @@ namespace Nautica
 
         private void SaveScoreToLog()
         {
-            ScoreLog.AddNewScore(score.ToString());
+            ScoreLog.AddNewScore(score.ToString("0.000"));
         }
     }
 }
