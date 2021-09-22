@@ -11,7 +11,6 @@ namespace Nautica
 
         void Start()
         {
-            score.GetComponent<TMP_Text>();
             score.text = ScoreLog.GetScore();
         }
     }
